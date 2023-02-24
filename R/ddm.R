@@ -13,13 +13,6 @@
 #'  \item{"rrf"}{ddm_param\[1\] = ntrees \[(1,500)\]}
 #' }
 #' @return integer, list, etc. that contains calibrated model structure
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
@@ -143,13 +136,6 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 #' }
 #' @param mdl_params calibrated model structure \[integer, list, etc.\]
 #' @return predictions \[N x 1\]
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
@@ -252,12 +238,6 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 #' @details
 #' Note that the number of distance calculations required for estimating the RBF
 #' kernels (parameters) in the GRNN model grows O(N^2).
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @references
 #'  D.F. Specht (1991), A general regression neural network, IEEE Transactions
 #'  on Neural Networks, 2, 6, pp. 568-576, DOI: 10.1109/72.97934.
@@ -358,12 +338,6 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 #' see below in the references.
 #' Note that the number of distance calculations required for estimating the RBF
 #' kernels (parameters) in the GRNN model grows O(N^2).
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @references
 #'  D.F. Specht (1991), A general regression neural network, IEEE Transactions
 #'  on Neural Networks, 2, 6, pp. 568-576, DOI: 10.1109/72.97934.
@@ -428,12 +402,6 @@ grnn_predict <- function(Y,X,Xtest,
 #' The CR algorithm is the VR using distance 1-x'y assuming x and y
 #' are unit vectors. The brute algorithm searches linearly. It is a
 #' naive method.
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @references
 #'  Lall, U., and A. Sharma (1996), A nearest neighbor bootstrap for time series
 #'  resampling, Water. Resour. Res., 32, 679-693.
