@@ -249,7 +249,7 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 #' @param Yv validation target vector \[Nv x 1\]
 #' @param Xv validation input matrix for generating validation predictions \[Nv x D\]
 #' @return optimized kernel bandwith \[scalar\]
-#' @details Input arguments must matrices.
+#' @details
 #' Note that the number of distance calculations required for estimating the RBF
 #' kernels (parameters) in the GRNN model grows O(N^2).
 #' @examples
@@ -357,7 +357,7 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 #' @details Default value of the `bw` input argument set to the Gaussian Reference Rule (Harrold et al., 2001),
 #' see below in the references.
 #' Note that the number of distance calculations required for estimating the RBF
-#' kernels (parameters) in the GRNN model grows O(N^2). Please ensure input arguments are matrices.
+#' kernels (parameters) in the GRNN model grows O(N^2).
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -427,7 +427,7 @@ grnn_predict <- function(Y,X,Xtest,
 #' The exact nearest neighbors are searched in this package.
 #' The CR algorithm is the VR using distance 1-x'y assuming x and y
 #' are unit vectors. The brute algorithm searches linearly. It is a
-#' naive method. Please ensure input arguments are matrices.
+#' naive method.
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -463,42 +463,39 @@ knnr_predict <- function(Y,X,Xtest,k=3,method="kd_tree"){
 
 # ------------------------------------------------------------------------------
 
+# require(pracma) # required for Moore-Penrose generalized inverse function pinv()
+
+#' @title Calibrate (train) a sparse p-th order Volterra series model
+#' @description
 #' This function calculates a  sparse p-th order multiple input single output
 #' (MISO) Volterra series model for given input-output data pairs X and Y,
 #' using the Moore-Penrose generalized inverse to estimate the different
-#' triangular kernels (see Eq. 8 in Wu and Kareem [2014]).
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - input matrix (explanatory variables) [N x D]
-#' @param p - order (polynomial degree) of Volterra model [scalar]
-#'
-#' Output:
-#' @param H - p-th order kernels of Volterra model [Q x 1]
-
-#' Reference:
-#'
+#' triangular kernels (see Eq. 8 in Wu and Kareem \[2014\]).
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X input matrix (explanatory variables) \[N x D\]
+#' @param p order (polynomial degree) of Volterra model \[scalar\]
+#' @return p-th order kernels of Volterra model \[Q x 1\]
+#' @details
+#' NOTE: the number of kernels (parameters) in the Volterra series model grows exponentially
+#' based on p (the model order).
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#' # Usage:
+#' p=2
+#' X=matrix(runif(1000),500,20)
+#' Y=matrix(runif(500),500,1)
+#' H = spoV_estimate(Y,X,2) # sparse second-order Volterra series kernels
+#'  }
+#' }
+#' @references
 #'  T. Wu and A. Kareem (2014), Simulation of nonlinear bridge aerodynamics: A sparse
 #'  third-order Volterra model, Journal of Sound and Vibration, 333, 1, pp. 178-188
 #'  https://doi.org/10.1016/j.jsv.2013.09.003.
 #'
 #'  https://stackoverflow.com/questions/49538911/r-given-a-matrix-and-a-power-produce-multiple-matrices-containing-all-unique
-
-#' NOTE: the number of kernels (parameters) in the Volterra series model grows exponentially
-#' based on p (the model order)
-
-#' Created on: Apr. 4, 2018 by JMQ
-#' Updated on: Apr. 25, 2018 by JMQ
-#'
-#' Usage:
-#' p=2
-#' X=matrix(runif(1000),500,20)
-#' Y=matrix(runif(500),500,1)
-#' H = spoV_estimate(Y,X,2); # sparse second-order Volterra series kernels
-#'
-
-# require(pracma) # required for Moore-Penrose generalized inverse function pinv()
-
+#' @rdname spoV_estimate
+#' @export
 spoV_estimate <- function(Y,X,p){
 
   N = nrow(as.matrix(X)) # number of samples
