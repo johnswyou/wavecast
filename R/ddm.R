@@ -1,22 +1,26 @@
+#' @title Calibrate (train) a data-driven model (DDM)
+#' @description
 #' This function calibrates a data-driven model (DDM) for a given input-
 #' output dataset.
-#'
-#' Input(s):
-#' @param yc - calibration target [N x 1]
-#' @param xc - calibration inputs [N x D]
-#' @param ddm - data-driven model [string: 'spov','knnr','grnn','rrf']
-#' @param ddm_param - data-driven model hyper-parameter(s)
-#'                    'spov': ddm_param[1] = model order [1 < integer <= 3]
-#'                    'knnr': ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]
-#'                    'grnn': no ddm_param as kernel bandwidth determined automatically
-#'                    'rrf': ddm_param[1] = ntrees [(1,500)]
-#'
-#'
-#' Output:
-#' integer, list, etc. that contains calibrated model structure
-#'
-#' Reference(s):
-#'
+#' @param yc calibration target [N x 1]
+#' @param xc calibration inputs [N x D]
+#' @param ddm data-driven model [string: 'spov','knnr','grnn','rrf']
+#' @param ddm_param data-driven model hyper-parameter(s)
+#' \itemize{
+#'  \item{"spov"}{ddm_param[1] = model order [1 < integer <= 3]}
+#'  \item{"knnr"}{ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]}
+#'  \item{"grnn"}{no ddm_param as kernel bandwidth determined automatically}
+#'  \item{"rrf"}{ddm_param[1] = ntrees [(1,500)]}
+#' }
+#' @return integer, list, etc. that contains calibrated model structure
+#' @details DETAILS
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
 #' selection method for water resources modeling, Water Resour. Res., 52,
@@ -26,21 +30,8 @@
 #' based hydrological and water resources forecasting models for real-world
 #' applications with best practices and a new forecasting framework, J. Hydrol.,
 #' doi:10.1016/j.jhydrol.2018.05.003.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 10, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-#'
-
+#' @rdname calibrateDDM
+#' @export
 calibrateDDM <- function(yc,xc,ddm,ddm_param){
 
 
