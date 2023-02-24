@@ -233,24 +233,32 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 
 # ------------------------------------------------------------------------------
 
-#' This function calibrates a Generalized Regression Neural Newtork
+# require(pracma) # required for Euclidean distance calculations and for optimizing kernel bandwidth (via optimize)
+# require(DEoptim) # required for optimizing kernel bandwidth (via DEoptim)
+# require(hydroGOF) # required for objective function for optimizing kernel bandwidth
+
+#' @title Calibrate a Generalized Regression Neural Newtork (GRNN)
+#' @description
+#' This function calibrates a Generalized Regression Neural Network
 #' model's kernel bandwidth 'sigma' based on the radial basis
 #' function (RBF, also known as Gaussian) kernel using the 'optimize'
 #' function from the 'stats' package for a set of calibration data
 #' pairs (Y,X) and a set of validation data pairs (Yv,Xv).
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - input matrix (explanatory variables) [N x D]
-#' @param Yv - validation target vector [Nv x 1]
-#' @param Xv - validation input matrix for generating validation predictions [Nv x D]
-#'
-#' Output:
-#' @param bw_opt - optimized kernel bandwith [scalar]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X input matrix (explanatory variables) \[N x D\]
+#' @param Yv validation target vector \[Nv x 1\]
+#' @param Xv validation input matrix for generating validation predictions \[Nv x D\]
+#' @return optimized kernel bandwith \[scalar\]
+#' @details Input arguments must matrices.
+#' Note that the number of distance calculations required for estimating the RBF
+#' kernels (parameters) in the GRNN model grows O(N^2)
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @references
 #'  D.F. Specht (1991), A general regression neural network, IEEE Transactions
 #'  on Neural Networks, 2, 6, pp. 568-576, DOI: 10.1109/72.97934.
 #'
@@ -258,22 +266,8 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 #'  bandwidth for measuring dependence in hydrologic time series using the
 #'  mutual information criterion, Stoch. Environ. Res. Risk Assess., 15, pp.
 #'  310-324.
-
-#' NOTE: the number of distance calculations required for estimating the RBF
-#' kernels (parameters) in the GRNN model grows O(N^2)
-
-#' Created on: Mar. 5, 2018 by JMQ
-#' Updated on: Mar. 5, 2018 by JMQ
-#'
-#' Usage:
-#'
-#' bw_opt = grnn_estimate(Y,X,Yv,Xv);
-#'
-
-# require(pracma) # required for Euclidean distance calculations and for optimizing kernel bandwidth (via optimize)
-# require(DEoptim) # required for optimizing kernel bandwidth (via DEoptim)
-# require(hydroGOF) # required for objective function for optimizing kernel bandwidth
-
+#' @rdname grnn_estimate
+#' @export
 grnn_estimate <- function(Y,X,Yv,Xv){
 
   Y = as.matrix(Y)
