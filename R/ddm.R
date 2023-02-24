@@ -251,7 +251,7 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 #' @return optimized kernel bandwith \[scalar\]
 #' @details Input arguments must matrices.
 #' Note that the number of distance calculations required for estimating the RBF
-#' kernels (parameters) in the GRNN model grows O(N^2)
+#' kernels (parameters) in the GRNN model grows O(N^2).
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -341,26 +341,30 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 
 # ------------------------------------------------------------------------------
 
+# require(pracma) # required for Euclidean distance calculations
+
+#' @title Predict using a calibrated Generalized Regression Neural Network (GRNN) model
+#' @description
 #' This function calculates predictions for a set of model inputs 'Xtest'
 #' using a Generalized Regression Neural Network model for a given kernel
 #' bandwidth 'sigma' and using the radial basis function (RBF, also known
 #' as Gaussian) kernel.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - input matrix (explanatory variables) [N x D]
-#' @param Xtest - test input matrix for generating predictions [Ntest x D]
-#' @param bw - RBF kernel bandwidth [scalar] (e.g., default set to the
-#'                Gaussian Reference Rule (Harrold et al., 2001), see below:
-#'                sigma = ((4/(D+2))^(1/(D+4)))*N^(-1/(D+4))
-#'                )
-#'
-#' Output:
-#' @param Ptest - prediction for input matrix Xtest [Ntest x 1]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X input matrix (explanatory variables) \[N x D\]
+#' @param Xtest test input matrix for generating predictions \[Ntest x D\]
+#' @param bw RBF kernel bandwidth \[scalar\], Default: ((4/(nrow(X) + 2))^(1/(nrow(X) + 4))) * N^(-1/(ncol(X) + 4))
+#' @return prediction for input matrix Xtest \[Ntest x 1\]
+#' @details Default value of the `bw` input argument set to the Gaussian Reference Rule (Harrold et al., 2001),
+#' see below in the references.
+#' Note that the number of distance calculations required for estimating the RBF
+#' kernels (parameters) in the GRNN model grows O(N^2). Please ensure input arguments are matrices.
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @references
 #'  D.F. Specht (1991), A general regression neural network, IEEE Transactions
 #'  on Neural Networks, 2, 6, pp. 568-576, DOI: 10.1109/72.97934.
 #'
@@ -368,20 +372,8 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 #'  bandwidth for measuring dependence in hydrologic time series using the
 #'  mutual information criterion, Stoch. Environ. Res. Risk Assess., 15, pp.
 #'  310-324.
-
-#' NOTE: the number of distance calculations required for estimating the RBF
-#' kernels (parameters) in the GRNN model grows O(N^2)
-
-#' Created on: Feb. 28, 2018 by JMQ
-#' Updated on: Mar. 5, 2018 by JMQ
-#'
-#' Usage:
-#'
-#' P = grnn_predict(Y,X,Xtest,bw = 0.5);
-#'
-
-# require(pracma) # required for Euclidean distance calculations
-
+#' @rdname grnn_predict
+#' @export
 grnn_predict <- function(Y,X,Xtest,
                          bw =
                            ((4/(nrow(X)+2))^(1/(nrow(X)+4)))*
