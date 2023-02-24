@@ -537,34 +537,31 @@ spoV_estimate <- function(Y,X,p){
 
 # ------------------------------------------------------------------------------
 
+#' @title Predict using a calibrated sparse p-th order Volterra series model
+#' @description
 #' This function generates predictions for a sparse p-th order multiple input single
 #' output (MISO) Volterra series model for given input X and parameters H.
-#'
-#' Inputs:
-#' @param X - input matrix (explanatory variables) [N x D] (must be a matrix (i.e., ?as.matrix)
-#' @param H - p-th order kernels of Volterra model [Q x 1]
-#' @param p - order (polynomial degree) of Volterra model [scalar]
-#'
-#' Output:
-#' @param P - prediction [N x 1]
-
-#' Reference:
-#'
-#'  T. Wu and A. Kareem (2014), Simulation of nonlinear bridge aerodynamics: A sparse
-#'  third-order Volterra model, Journal of Sound and Vibration, 333, 1, pp. 178-188
-#'  https://doi.org/10.1016/j.jsv.2013.09.003.
-#'
-#' Created on: Apr. 4, 2018 by JMQ
-#' Updated on: Apr. 25, 2018 by JMQ
-#'
-#' Usage:
+#' @param X input matrix (explanatory variables) \[N x D\] (must be a matrix (i.e., ?as.matrix)
+#' @param H p-th order kernels of Volterra model \[Q x 1\]
+#' @param p order (polynomial degree) of Volterra model \[scalar\]
+#' @return prediction \[N x 1\]
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#' # Usage:
 #' p=2
 #' X=matrix(runif(1000),500,20)
 #' Y=matrix(runif(500),500,1)
 #' H = spoV_estimate(Y,X,2); # sparse second-order Volterra series kernels
 #' P = spoV_predict(X,H,p); # predictions
-#'
-
+#'  }
+#' }
+#' @references
+#'  T. Wu and A. Kareem (2014), Simulation of nonlinear bridge aerodynamics: A sparse
+#'  third-order Volterra model, Journal of Sound and Vibration, 333, 1, pp. 178-188
+#'  https://doi.org/10.1016/j.jsv.2013.09.003.
+#' @rdname spoV_predict
+#' @export
 spoV_predict <- function(X,H,p){
 
   N = nrow(as.matrix(X)) # number of samples
