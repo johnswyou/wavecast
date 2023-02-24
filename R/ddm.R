@@ -403,48 +403,42 @@ grnn_predict <- function(Y,X,Xtest,
 
 # ------------------------------------------------------------------------------
 
+# require(FNN) # required for nearest neighbour estimation
+
+#' @title Predict using a K-Nearest Neighbors (KNN) regression model
+#' @description
 #' This function calculates predictions for a set of model inputs 'Xtest'
 #' using a k nearest neighbour model whose neighbour searching algorithm can
 #' be selected according to different methods. The prediction is calculated
-#' by assuming equally weighted predictions based on the k nearest neighbours.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - input matrix (explanatory variables) [N x D]
-#' @param Xtest - test input matrix for generating predictions [Ntest x D]
-#' @param k - number of nearest neighbours to use in prediction [scalar < N]
-#' @param method - c("kd_tree", "cover_tree", "CR", "brute")
-#'                 The cover tree is O(n) space data structure which allows us to
-#'                 answer queries in the same O(log(n)) time as kd tree given a
-#'                 fixed intrinsic dimensionality. Templated code from
-#'                 http://hunch.net/~jl/projects/cover_tree/cover_tree.html is used.
-#'                 The kd tree algorithm is implemented in the Approximate Near
-#'                 Neighbor (ANN) C++ library (see http://www.cs.umd.edu/~mount/ANN/).
-#'                 The exact nearest neighbors are searched in this package.
-#'                 The CR algorithm is the VR using distance 1-x'y assuming x and y
-#'                 are unit vectors. The brute algorithm searches linearly. It is a
-#'                 naive method.
-#'
-#'
-#' Output:
-#' @param Ptest - prediction for input matrix Xtest [Ntest x 1]
-
-#' References:
-#'
+#' by assuming equally weighted predictions based on the k nearest neighbors.
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X input matrix (explanatory variables) \[N x D\]
+#' @param Xtest test input matrix for generating predictions \[Ntest x D\]
+#' @param k number of nearest neighbours to use in prediction \[scalar < N\]
+#' @param method `c("kd_tree", "cover_tree", "CR", "brute")`, Default: `"kd_tree"`
+#' @return prediction for input matrix Xtest \[Ntest x 1\]
+#' @details
+#' The cover tree is O(n) space data structure which allows us to
+#' answer queries in the same O(log(n)) time as kd tree given a
+#' fixed intrinsic dimensionality. Templated code from
+#' http://hunch.net/~jl/projects/cover_tree/cover_tree.html is used.
+#' The kd tree algorithm is implemented in the Approximate Near
+#' Neighbor (ANN) C++ library (see http://www.cs.umd.edu/~mount/ANN/).
+#' The exact nearest neighbors are searched in this package.
+#' The CR algorithm is the VR using distance 1-x'y assuming x and y
+#' are unit vectors. The brute algorithm searches linearly. It is a
+#' naive method. Please ensure input arguments are matrices.
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @references
 #'  Lall, U., and A. Sharma (1996), A nearest neighbor bootstrap for time series
 #'  resampling, Water. Resour. Res., 32, 679-693.
-
-#' Created on: Apr. 24, 2018 by JMQ
-#' Updated on: Apr. 24, 2018 by JMQ
-#'
-#' Usage:
-#'
-#' P = knnr_predict(Y,X,Xtest,k=5,method="kd_tree");
-#'
-
-# require(FNN) # required for nearest neighbour estimation
-
+#' @rdname knnr_predict
+#' @export
 knnr_predict <- function(Y,X,Xtest,k=3,method="kd_tree"){
 
   # get k nearest neighbours to Xtest
