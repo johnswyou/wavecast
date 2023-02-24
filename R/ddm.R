@@ -126,27 +126,31 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 
 # ------------------------------------------------------------------------------
 
+#' @title Predict using a calibrated data-driven model (DDM)
+#' @description
 #' This function makes predictions using a calibrated data-driven model
 #' (DDM) for a given input vector/matrix.
-#'
-#' Input(s):
-#' @param x - inputs [M x D]
-#' @param xc - calibration inputs [N x D]
-#' @param yc - calibration target [N x 1]
-#' @param ddm - data-driven model [string: 'spov','knnr','grnn','rrf']
-#' @param ddm_param - data-driven model hyper-parameter(s)
-#'                    'spov': ddm_param[1] = model order [1 < integer <= 3]
-#'                    'knnr': ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]
-#'                    'grnn': no ddm_param as kernel bandwidth determined automatically
-#'                    'rrf': ddm_param[1] = ntrees [(1,500)]
-#' @param mdl_params - calibrated model structure [integer, list, etc.]
-#'
-#'
-#' Output:
-#' @param pred - prediction [N x 1]
-#'
-#' Reference(s):
-#'
+#' @param x inputs [M x D]
+#' @param xc calibration inputs [N x D]
+#' @param yc calibration target [N x 1]
+#' @param ddm data-driven model [string: 'spov','knnr','grnn','rrf']
+#' @param ddm_param data-driven model hyper-parameter(s)
+#' \itemize{
+#'  \item{"spov"}{ddm_param[1] = model order [1 < integer <= 3]}
+#'  \item{"knnr"}{ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]}
+#'  \item{"grnn"}{no ddm_param as kernel bandwidth determined automatically}
+#'  \item{"rrf"}{ddm_param[1] = ntrees [(1,500)]}
+#' }
+#' @param mdl_params calibrated model structure [integer, list, etc.]
+#' @return predictions [N x 1]
+#' @details DETAILS
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
 #' selection method for water resources modeling, Water Resour. Res., 52,
@@ -156,21 +160,8 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 #' based hydrological and water resources forecasting models for real-world
 #' applications with best practices and a new forecasting framework, J. Hydrol.,
 #' doi:10.1016/j.jhydrol.2018.05.003.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 10, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-#'
-
+#' @rdname predictDDM
+#' @export
 predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 
 
