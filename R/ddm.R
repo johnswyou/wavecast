@@ -130,19 +130,19 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 #' @description
 #' This function makes predictions using a calibrated data-driven model
 #' (DDM) for a given input vector/matrix.
-#' @param x inputs [M x D]
-#' @param xc calibration inputs [N x D]
-#' @param yc calibration target [N x 1]
-#' @param ddm data-driven model [string: 'spov','knnr','grnn','rrf']
+#' @param x inputs \[M x D\]
+#' @param xc calibration inputs \[N x D\]
+#' @param yc calibration target \[N x 1\]
+#' @param ddm data-driven model \[string: 'spov','knnr','grnn','rrf'\]
 #' @param ddm_param data-driven model hyper-parameter(s)
 #' \itemize{
-#'  \item{"spov"}{ddm_param[1] = model order [1 < integer <= 3]}
-#'  \item{"knnr"}{ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]}
+#'  \item{"spov"}{ddm_param\[1\] = model order \[1 < integer <= 3\]}
+#'  \item{"knnr"}{ddm_param\[1\] = no. of nearest neighbours \[1 < integer < sample size-1\]}
 #'  \item{"grnn"}{no ddm_param as kernel bandwidth determined automatically}
-#'  \item{"rrf"}{ddm_param[1] = ntrees [(1,500)]}
+#'  \item{"rrf"}{ddm_param\[1\] = ntrees \[(1,500)\]}
 #' }
-#' @param mdl_params calibrated model structure [integer, list, etc.]
-#' @return predictions [N x 1]
+#' @param mdl_params calibrated model structure \[integer, list, etc.\]
+#' @return predictions \[N x 1\]
 #' @details DETAILS
 #' @examples
 #' \dontrun{
