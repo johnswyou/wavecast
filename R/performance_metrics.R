@@ -493,20 +493,15 @@ picp <- function(Y, X, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title p-Quantile Loss (QLp)
+#' @description
 #' This function calculates the p-quantile loss (QLp) or p-risk given a set of predictions
 #' 'X', the target 'Y', and a quantile 'p' (0, 1).
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#' @param p - quantile [0 < p < 1]
-#'
-#' Output:
-#' @param res - p-quantile loss [scalar]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @param p quantile \[0 < p < 1\], Default: 0.5
+#' @return p-quantile loss \[scalar\]
+#' @references
 #' Seeger, M.W., Salinas, D., Flunkert, V., 2016. Bayesian Intermittent Demand Forecasting
 #' for Large Inventories, in: Lee, D.D., Sugiyama, M., Luxburg, U. V, Guyon, I., Garnett, R.
 #' (Eds.), Advances in Neural Information Processing Systems 29. Curran Associates, Inc.,
@@ -519,15 +514,8 @@ picp <- function(Y, X, alpha=0.5){
 #' D. Salinas, V. Flunkert, J. Gasthaus et al., 2019, DeepAR: Probabilistic forecasting
 #' with autoregressive recurrent networks. International Journal of Forecasting,
 #' https://doi.org/10.1016/j.ijforecast.2019.07.001.
-#'
-#'
-#' Created on: Jan. 18, 2020 by JMQ
-#' Updated on: Jan. 18, 2020 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname qlp
+#' @export
 qlp <- function(Y, X, p=0.5){
 
   X = as.matrix(X)
