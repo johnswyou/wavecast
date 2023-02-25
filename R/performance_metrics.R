@@ -288,30 +288,19 @@ cpp <- function(Y, X){
 
 # ------------------------------------------------------------------------------
 
+#' @title Liu-Mean Efficiency (LME)
+#' @description
 #' This function calculates the Liu-Mean Efficiency (LME), a modified version of
 #' the Nash-Sutcliffe (NSE) and Kling-Gupta Efficiency (KGE), given a vector of
 #' predictions 'X' and targets 'Y'.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - prediction vector  [N x 1]
-#'
-#' Output:
-#' @param res - Liu-Mean Efficiency (LME) [-inf < scalar <= 1]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X prediction vector  \[N x 1\]
+#' @return Liu-Mean Efficiency (LME) \[-inf < scalar <= 1\]
+#' @references
 #' Liu, D. (2020), A rational performance criterion for hydrological model, J. Hydrol.,
 #' 580, 125488.
-#'
-#' Created on: Feb. 5, 2021 by JMQ
-#' Updated on: Feb. 5, 2021 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname lme
+#' @export
 lme <- function(Y, X){
 
   X = as.numeric(X)
