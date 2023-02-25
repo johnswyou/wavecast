@@ -544,31 +544,20 @@ qlp <- function(Y, X, p=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title Non-parametric Kling-Gupta Efficiency
+#' @description
 #' This function calculates the non-parametric Kling-Gupta Efficiency (RNP), a
 #' modified version of the Kling-Gupta Efficiency (KGE), given a vector of
 #' predictions 'X' and targets 'Y'.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - prediction vector  [N x 1]
-#'
-#' Output:
-#' @param res - non-parametric Kling-Gupta Efficiency (RNP) [-inf < scalar <= 1]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X prediction vector \[N x 1\]
+#' @return non-parametric Kling-Gupta Efficiency (RNP) \[-inf < scalar <= 1\]
+#' @references
 #' Pool, S., Vis, M., Seibert, J. (2018), Evaluating model performance: towards a
 #' non-parametric variant of the Kling-Gupta effficiency, Hydrological Sci. J.,
 #' 63 (13-14), 1941-1953.
-#'
-#' Created on: Feb. 5, 2021 by JMQ
-#' Updated on: Feb. 5, 2021 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname rnp
+#' @export
 rnp <- function(Y, X){
 
   X = as.numeric(X)
