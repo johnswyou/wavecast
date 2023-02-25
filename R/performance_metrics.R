@@ -386,32 +386,21 @@ meanIS <- function(Y, X, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title Mean Prediction Interval (MPI)
+#' @description
 #' This function calculates the mean prediction interval (MPI) given a
 #' set of predictions 'X', the target 'Y', and a confidence level of
 #' 1 - alpha.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param X - predictions matrix [N x D]
-#' @param alpha - specifies 1 - alpha confidence level [0 < alpha < 1]
-#'
-#' Output:
-#' @param res - mean prediction interval [scalar]
-
-#' References:
-#'
+#' @param X predictions matrix \[N x D\]
+#' @param alpha specifies 1 - alpha confidence level \[0 < alpha < 1\], Default: 0.5
+#' @return mean prediction interval \[scalar\]
+#' @references
 #' Shrestha, D.L., N. Kayastha, D. Solomatine, and R. Price (2014),
 #' Encapsulation of parametric uncertainty statistics by various
 #' predictive machine leanring models: MLUE method, J. Hydroinformatics,
 #' 16, 95-113.
-#'
-#' Created on: Oct. 16, 2018 by JMQ
-#' Updated on: Oct. 16, 2018 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname mpi
+#' @export
 mpi <- function(X, alpha=0.5){
 
   X = as.matrix(X)
