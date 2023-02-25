@@ -418,34 +418,23 @@ mpi <- function(X, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title Normalized Uncertainty Efficiency (NUE)
+#' @description
 #' This function calculates the normalized uncertainty efficiency (NUE)
 #' given a set of predictions 'X', the target 'Y', a weighting factor,
 #' and a confidence level of 1 - alpha.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#' @param w - weighting factor [0 < w < 1]
-#' @param alpha - specifies 1 - alpha confidence level [0 < alpha < 1]
-#'
-#' Output:
-#' @param res - normalized uncertainty efficiency [0 < scalar < 1]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @param w weighting factor \[0 < w < 1\]
+#' @param alpha specifies 1 - alpha confidence level \[0 < alpha < 1\], Default: 0.5
+#' @return normalized uncertainty efficiency \[0 < scalar < 1\]
+#' @references
 #' Dogulu, N., P. Lopez Lopez, D.P. Solomatine, A.H. Weerts and
 #' D.L. Shreshta (2015), Estimation of predictive hydrologic uncertainty
 #' using the quantile regression and UNEEC methods and their comparison
 #' on constrasting catchments, Hydrol. Earth. Syst. Sci., 19, 3181-3201.
-#'
-#' Created on: Oct. 16, 2018 by JMQ
-#' Updated on: Oct. 16, 2018 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname nue
+#' @export
 nue <- function(Y, X, w=1, alpha=0.5){
 
   X = as.matrix(X)
