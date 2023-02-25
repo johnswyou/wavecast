@@ -318,21 +318,16 @@ lme <- function(Y, X){
 
 # ------------------------------------------------------------------------------
 
+#' @title Mean Interval Score (meanIS)
+#' @description
 #' This function calculates the mean interval score (meanIS)
 #' given a set of predictions 'X', the target 'Y', and a
 #' confidence level of 1 - alpha.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#' @param alpha - specifies 1 - alpha confidence level [0 < alpha < 1]
-#'
-#' Output:
-#' @param res - mean interval score [scalar]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @param alpha specifies 1 - alpha confidence level \[0 < alpha < 1\], Default: 0.5
+#' @return mean interval score \[scalar\]
+#' @references
 #' T. Gneiting and  A.E. Raferty (2007), Strictly proper score rules,
 #' prediction, and estimation, Journal of the American Statistical
 #' Association, 102, pp. 359-378.
@@ -344,14 +339,8 @@ lme <- function(Y, X){
 #' C. Wan et al. (2014), Probabiistic forecasting of wind power
 #' generation using extreme learning machine, IEEE Transactions on Power
 #' Systems, 29, pp. 1033-1044.
-#'
-#' Created on: Aug. 24, 2019 by JMQ
-#' Updated on: Aug. 24, 2019 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname meanIS
+#' @export
 meanIS <- function(Y, X, alpha=0.5){
 
   X = as.matrix(X)
