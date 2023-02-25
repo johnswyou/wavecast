@@ -168,21 +168,19 @@ avg.rel.dev.amp <- function(Y, X, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title Coverage Probability Plot (CPP)
+#' @description
 #' This function calculates the coverage probability plot (CPP)
 #' given a set of predictions 'X' and the target 'Y'.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#'
-#' Output:
-#' @param res - list containing:
-#'              fq: forecast quantiles(0,0.1,...,1)
-#'              tq: theoretical quantiles(0,0.1,...,1)
-#'              cpp_mse: mean square error between forecast and theoretical quantiles
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @return list containing:
+#' \itemize{
+#'  \item{"fq"}{forecast quantiles(0,0.1,...,1)}
+#'  \item{"tq"}{theoretical quantiles(0,0.1,...,1)}
+#'  \item{"cpp_mse"}{mean square error between forecast and theoretical quantiles}
+#' }
+#' @references
 #' F. Laio and S. Tamea (2007), Verification tools for probabilistic
 #' forecasts of continuous hydrological variables,
 #' Hydrol. Earth Syst. Sci., 11, pp. 1267-1277.
@@ -190,14 +188,8 @@ avg.rel.dev.amp <- function(Y, X, alpha=0.5){
 #' B. Renard, D. Kavetski, G. Kuczera, M. Thyer, and S.W. Franks (2009), Understanding
 #' predictive uncertainty in hydrologic modeling: the challenge of identifying input
 #' and structural errors. Water. Resour. Res., 46, p. W05521.
-#'
-#' Created on: Aug. 24, 2019 by JMQ
-#' Updated on: Nov. 4, 2020 by JMQ (added alpha and eta indices from Renard et al., 2010)
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname cpp
+#' @export
 cpp <- function(Y, X){
 
 
