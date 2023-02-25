@@ -100,33 +100,22 @@ avg.asym.deg.T <- function(Y, X, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
-#' This function calculates the average deviation amplitude (D) given a
+#' @title Average Deviation Amplitude
+#' @description
+#' This function calculates the average deviation amplitude given a
 #' set of predictions 'X', the target 'Y', and a confidence level of
 #' 1 - alpha.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#' @param alpha - specifies 1 - alpha confidence level [0 < alpha < 1]
-#'
-#' Output:
-#' @param res - average deviation amplitude [scalar]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @param alpha specifies 1 - alpha confidence level \[0 < alpha < 1\], Default: 0.5
+#' @return average deviation amplitude \[scalar\]
+#' @references
 #' Xiong, L., N. Wan, X. Wei, and K. O'Connor (2009), Indices
 #' for assessing the prediction bounds of hydrological models
 #' and application by generalised likelihood uncertainty
 #' estimation, Hydrological Sciences Journal, 54:5, 852-871.
-#'
-#' Created on: Dec. 17, 2020 by JMQ
-#' Updated on: Dec. 17, 2020 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname avg.dev.amp
+#' @export
 avg.dev.amp <- function(Y, X, alpha=0.5){
 
   X = as.matrix(X)
