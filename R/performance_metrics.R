@@ -459,33 +459,22 @@ nue <- function(Y, X, w=1, alpha=0.5){
 
 # ------------------------------------------------------------------------------
 
+#' @title Prediction Interval Coverage Probability (PICP)
+#' @description
 #' This function calculates the prediction interval coverage probability
 #' (PICP) given a set of predictions 'X', the target 'Y', and a
 #' confidence level of 1 - alpha.
-#'
-#'
-#' Inputs (must be a matrix (i.e., ?as.matrix):
-#' @param Y - target vector (response variable) [N x 1]
-#' @param X - predictions matrix [N x D]
-#' @param alpha - specifies 1 - alpha confidence level [0 < alpha < 1]
-#'
-#' Output:
-#' @param res - prediction interval coverage probability [0 < scalar < 1]
-
-#' References:
-#'
+#' @param Y target vector (response variable) \[N x 1\]
+#' @param X predictions matrix \[N x D\]
+#' @param alpha specifies 1 - alpha confidence level \[0 < alpha < 1\], Default: 0.5
+#' @return prediction interval coverage probability \[0 < scalar < 1\]
+#' @references
 #' Shrestha, D.L., N. Kayastha, D. Solomatine, and R. Price (2014),
 #' Encapsulation of parametric uncertainty statistics by various
 #' predictive machine leanring models: MLUE method, J. Hydroinformatics,
 #' 16, 95-113.
-#'
-#' Created on: Oct. 16, 2018 by JMQ
-#' Updated on: Oct. 16, 2018 by JMQ
-#'
-#' Usage:
-#'
-#'
-
+#' @rdname picp
+#' @export
 picp <- function(Y, X, alpha=0.5){
 
   X = as.matrix(X)
