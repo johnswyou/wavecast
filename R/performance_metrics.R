@@ -19,11 +19,11 @@ aril <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate average relative interval length (ARIL)
+  # calculate average relative interval length (ARIL)
   res = mean( (Qlu[2,] - Qlu[1,]) / Y)
 
   return(res)
@@ -53,11 +53,11 @@ avg.asym.deg.S <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate S index of average asymmetry degree
+  # calculate S index of average asymmetry degree
   res = mean((Qlu[2,]-Y)/(Qlu[2,] - Qlu[1,]))
 
   return(res)
@@ -87,11 +87,11 @@ avg.asym.deg.T <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate T index of average asymmetry degree
+  # calculate T index of average asymmetry degree
   res = mean((abs( (Qlu[2,]-Y)^3 + (Qlu[1,]-Y)^3 ) / (Qlu[2,] - Qlu[1,])^3)^1/3)
 
   return(res)
@@ -121,11 +121,11 @@ avg.dev.amp <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate average deviation amplitude (D)
+  # calculate average deviation amplitude (D)
   res = mean(abs(0.5*(Qlu[2,] - Qlu[1,])-Y))
 
   return(res)
@@ -155,11 +155,11 @@ avg.rel.dev.amp <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate average relative deviation amplitude (RD)
+  # calculate average relative deviation amplitude (RD)
   res = mean(abs(((0.5*(Qlu[2,] - Qlu[1,]))/Y)-1))
 
   return(res)
@@ -225,12 +225,12 @@ cpp <- function(Y, X){
 
   for(i in 1:n){
 
-    #' evaluate the cumulative distribution function of the predictions
-    #' in correspondence to each observed value (i.e., calculate ecdf of
-    #' forecasts for each time point (1:n) and evaluate at each
-    #' observation)
+    # evaluate the cumulative distribution function of the predictions
+    # in correspondence to each observed value (i.e., calculate ecdf of
+    # forecasts for each time point (1:n) and evaluate at each
+    # observation)
 
-    #' calculate ecdf
+    # calculate ecdf
     tmp = homemade_ecdf(X[i,])
     F = tmp$v_f
     V = tmp$v_x
@@ -256,8 +256,8 @@ cpp <- function(Y, X){
 
   }
 
-  #' sort z and find rank of each z[i] then calculate the empirical
-  #' cumulative distribution of z, i.e., rank[i]/n for i in 1:n
+  # sort z and find rank of each z[i] then calculate the empirical
+  # cumulative distribution of z, i.e., rank[i]/n for i in 1:n
 
   # S = sort(z)
   # R = match(z, S)
@@ -309,7 +309,7 @@ lme <- function(Y, X){
   k1 = cor(Y,X)*(var(X)/var(Y))
   beta = mean(X)/mean(Y)
 
-  #' Liu-Mean Efficiency (LME)
+  # Liu-Mean Efficiency (LME)
   res = 1 - sqrt( (k1-1)^2 + (beta-1)^2 )
 
   return(res)
@@ -405,11 +405,11 @@ mpi <- function(X, alpha=0.5){
 
   X = as.matrix(X)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate mean prediction interval (MPI)
+  # calculate mean prediction interval (MPI)
   res = mean(Qlu[2,] - Qlu[1,])
 
   return(res)
@@ -440,17 +440,17 @@ nue <- function(Y, X, w=1, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate prediction interval coverage probability (PICP)
+  # calculate prediction interval coverage probability (PICP)
   pcp = sum(Y >= Qlu[1,] & Y <= Qlu[2,])/length(Y)
 
-  #' calculate average relative interval length (ARIL)
+  # calculate average relative interval length (ARIL)
   arl = mean( (Qlu[2,] - Qlu[1,]) / Y)
 
-  #' calculate normalized uncertainty efficiency (NUE)
+  # calculate normalized uncertainty efficiency (NUE)
   res = pcp / (w * arl)
 
   return(res)
@@ -480,11 +480,11 @@ picp <- function(Y, X, alpha=0.5){
   X = as.matrix(X)
   Y = as.matrix(Y)
 
-  #' get lower and upper qualtiles at confidence level
+  # get lower and upper qualtiles at confidence level
   Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
-  #' calculate prediction interval coverage probability (PICP)
+  # calculate prediction interval coverage probability (PICP)
   res = sum(Y >= Qlu[1,] & Y <= Qlu[2,])/length(Y)
 
   return(res)
@@ -523,15 +523,15 @@ qlp <- function(Y, X, p=0.5){
   pvec = matrix(p, nrow = length(Y),1)
   onevec = matrix(1, nrow = length(Y),1)
 
-  #' get quantile
+  # get quantile
   Qp = apply(X, 1, quantile, probs = p,
              na.rm = TRUE)
 
-  #' calculate p-quantile loss (QLp) (Li et al., 2019) also known as p-risk in Seeger et al. (2016)
-  #' and Salinas et al. (2019)
-  #'
-  #' Note that Eqns from Seeger et al. (2016) and Li et al. (2019) result in the same answer while
-  #' Salinas et al. (2019) differs
+  # calculate p-quantile loss (QLp) (Li et al., 2019) also known as p-risk in Seeger et al. (2016)
+  # and Salinas et al. (2019)
+  #
+  # Note that Eqns from Seeger et al. (2016) and Li et al. (2019) result in the same answer while
+  # Salinas et al. (2019) differs
 
   res = 2 * sum( (pvec - (Y <= Qp)) * (Y - Qp) ) / sum(Y) # Li et al. (2019)
 
@@ -580,7 +580,7 @@ rnp <- function(Y, X){
   # r component
   rnp.r = cor(X, Y, method="spearman")
 
-  #' non-parametric Kling-Gupta Efficiency (RNP)
+  # non-parametric Kling-Gupta Efficiency (RNP)
   res = 1 - sqrt( (rnp.alpha-1)^2 + (rnp.beta-1)^2 + (rnp.r - 1)^2)
 
   return(res)
