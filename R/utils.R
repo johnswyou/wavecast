@@ -248,6 +248,7 @@ de_standardize <- function(X1,X2,...){
 
 # This function time lags the target variable based on the lead time and
 # required time delay.
+#' @keywords internal
 lagmatrix <- function(x,max.lag){embed(c(rep(NA,max.lag),x),max.lag+1)}
 
 # Example
@@ -294,7 +295,7 @@ partitionInds <- function(N,nval,ntst){
 # This function creates a periodic sequence at the yearly scale using
 # either monthly, daily, or hourly dates.  If desired, a phase component
 # can also be included.
-
+#' @keywords internal
 time2sine = function(dte=seq(as.Date("1910/1/1"), as.Date("1999/12/30"), "days"),
                      phase=0,timescale = "daily"){
 
@@ -336,7 +337,7 @@ time2sine = function(dte=seq(as.Date("1910/1/1"), as.Date("1999/12/30"), "days")
 # ------------------------------------------------------------------------------
 
 # copy and paste data from R Studio into Excel
-
+#' @keywords internal
 write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
   write.table(x,"clipboard-16384",sep="\t",row.names=row.names,col.names=col.names,...)
 }
@@ -353,7 +354,7 @@ write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
 
 # Output:
 # @param y: input matrix based forecast lead time and time delays [N x D +sum(timedelays)]
-
+#' @keywords internal
 xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
   isvec = is.vector(x)
@@ -440,7 +441,7 @@ xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
 # Output:
 # @param y: forecast lead time and time delay matrix [N x timedelay+1]
-
+#' @keywords internal
 yLeadTimeDelay <- function(x,leadtime=1,timedelay=1){
 
 
