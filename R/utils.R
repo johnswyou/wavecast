@@ -1,29 +1,12 @@
-#' This function cbinds target and input variables together in a data frame
+#' @title Column Bind Target and Input Variables
+#' @description
+#' This utility function column binds target and input variables together in a data frame
 #' and removes 'NA' values.
-#'
-#' Input(s):
-#' @param y: target time series [N x 1]
-#' @param x: input time series [N x D]
-#'
-#' Output:
-#' @param res: resulting matrix [N x D+1]
-#'
-#'  Reference(s):
-#'
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Jul. 25, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-
+#' @param y target time series \[N x 1\]
+#' @param x input time series \[N x D\]
+#' @return resulting matrix \[N x D+1\]
+#' @rdname bindYX
+#' @export
 bindYX <- function(y,x){
 
   yx = cbind(y,x)
@@ -34,33 +17,16 @@ bindYX <- function(y,x){
 
 # ------------------------------------------------------------------------------
 
-#' This function cbinds target, input variables, and side variables together
+#' @title Column Bind Target, Input and Auxiliary Variables
+#' @description
+#' This function column binds target, input variables, and auxiliary variables together
 #' in a data frame and removes 'NA' values.
-#'
-#' Input(s):
-#' @param y: target time series [N x 1]
-#' @param x: input time series [N x D]
-#' @param z: side variables [N x M]
-#'
-#' Output:
-#' @param res: resulting matrix [N x D+M+1]
-#'
-#'  Reference(s):
-#'
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 5, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-
+#' @param y target time series \[N x 1\]
+#' @param x input time series \[N x D\]
+#' @param z auxiliary variables \[N x M\]
+#' @return resulting matrix \[N x D+M+1\]
+#' @rdname bindYXZ
+#' @export
 bindYXZ <- function(y,x,z){
 
   yxz = cbind(y,x,z)
@@ -71,31 +37,35 @@ bindYXZ <- function(y,x,z){
 
 # ------------------------------------------------------------------------------
 
+#' @title Scale Columns of a Matrix Based on Another Matrix
+#' @description
 #' This function scales an input matrix 'X2' between values 'a' and 'b' with the
-#' option to disclude NA values from the scaling (see example below) according to
+#' option to exclude NA values from the scaling (see example below) according to
 #' the content (max and min values) of scaling matrix 'X1'.
+#' @param X1 input matrix whose properties are used in scaling \[N x D\]
+#' @param X2 input matrix to scaled based on properties of X1 \[M x D\]
+#' @param a lower limit value for scaled data \[scalar\]
+#' @param b upper limit value for scaled data \[scalar\]
+#' @param ... further arguments to the `min()` and `max()` functions
+#' @return scaled input matrix X2 \[M x D\]
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  X1 = matrix(runif(16),4,4) # square matrix
+#'  X1[2:3,3:4] = NA           # inject some NA's into X1
+#'  X2 = matrix(rnorm(16),4,4) # another square matrix
 #'
-#' Inputs:
-#' @param X1 - input matrix whose properties are used in scaling [N x D]
-#' @param X2 - input matrix to scaled based on properties of X1 [M x D]
-#' @param a - lower limit value for scaled data [scalar]
-#' @param b - upper limit value for scaled data [scalar]
+#'  # Compute statistics with X1, apply scaling to X2
+#'  X3 = scale_ab(X1,X2,-1,1,na.rm=TRUE)
 #'
-#' Output:
-#' @param Xs - scaled input matrix X2 [M x D]
-
-#' Reference:
-#'
-#'  https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
-#'
-#'Example of use:
-#'
-# X1 = matrix(runif(16),4,4)
-# X2 = X1
-# X1[2:3,3:4] = NA
-# Xs2 = scale_ab(X1,X2,-1,1,na.rm=TRUE)
-
-
+#'  # NOTE: Typically, X1 will be the training set input features,
+#'  #       X2 will be the validation/test set.
+#'  }
+#' }
+#' @references
+#' https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
+#' @rdname scale_ab
+#' @export
 scale_ab <- function(X1,X2,a,b,...){
 
   X1 = as.matrix(X1)
@@ -123,31 +93,31 @@ scale_ab <- function(X1,X2,a,b,...){
 
 # ------------------------------------------------------------------------------
 
+#' @title De-scale Columns of a Matrix Based on Another Matrix
+#' @description
 #' This function de-scales an input matrix 'X2' from between values 'a' and 'b' with
 #' the option to disclude NA values from the scaling (see example below) according to
-#' the content (max and min values) of scaling matrix 'X1'.
-#'
-#' Inputs:
-#' @param X1 - input matrix whose properties are used in de-scaling [N x D]
-#' @param X2 - input matrix to de-scale based on properties of X1 [M x D]
-#' @param a - lower limit value for scaled data [scalar]
-#' @param b - upper limit value for scaled data [scalar]
-#'
-#' Output:
-#' @param Xds - de-scaled input matrix X2 [M x D]
-
-#' Reference:
-#'
-#'  https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
-#'
-#'Example of use:
-#'
-# X1 = matrix(runif(16),4,4)
-# X2 = X1
-# X1[2:3,3:4] = NA
-# Xds2 = de_scale_ab(X1,X2,-1,1,na.rm=TRUE)
-
-
+#' the content (max and min values) of scaling matrix 'X1'. In other words, this function
+#' undoes what `scale_ab` does.
+#' @param X1 input matrix whose properties are used in de-scaling \[N x D\]
+#' @param X2 input matrix to de-scale based on properties of X1 \[M x D\]
+#' @param a lower limit value for scaled data \[scalar\]
+#' @param b upper limit value for scaled data \[scalar\]
+#' @param ... further arguments to the `min()` and `max()` functions
+#' @return de-scaled input matrix X2 \[M x D\]
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  X1 = matrix(runif(16),4,4)
+#'  X2 = matrix(rnorm(16),4,4)
+#'  X1[2:3,3:4] = NA
+#'  X3 = de_scale_ab(X1,X2,-1,1,na.rm=TRUE)
+#'  }
+#' }
+#' @rdname de_scale_ab
+#' @references
+#' https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
+#' @export
 de_scale_ab <- function(X1,X2,a,b,...){
 
   X1 = as.matrix(X1)
@@ -177,29 +147,28 @@ de_scale_ab <- function(X1,X2,a,b,...){
 
 # ------------------------------------------------------------------------------
 
-#' This function standardizes an input matrix 'X2' with the option to disclude
+#' @title Standardize the Columns of a Matrix Based on Another Matrix
+#' @description
+#' This function standardizes an input matrix 'X2' with the option to exclude
 #' NA values from the scaling (see example below) according to the content
 #' (mean and standard deviation values) of standardizing matrix 'X1'.
-#'
-#' Inputs:
-#' @param X1 - input matrix whose properties are used in standardization [N x D]
-#' @param X2 - input matrix to standardize based on properties of X1 [M x D]
-#'
-#' Output:
-#' @param Xs - standardized input matrix X2 [M x D]
-
-#' Reference:
-#'
-#'  https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
-#'
-#'Example of use:
-#'
-# X1 = matrix(runif(16),4,4)
-# X2 = X1
-# X1[2:3,3:4] = NA
-# Xs2 = standardize(X1,X2,na.rm=TRUE)
-
-
+#' @param X1 input matrix whose properties are used in standardization \[N x D\]
+#' @param X2 input matrix to standardize based on properties of X1 \[M x D\]
+#' @param ... further arguments to `mean()` and `std()`
+#' @return standardized input matrix X2 \[M x D\]
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  X1 = matrix(runif(16),4,4)
+#'  X2 = matrix(rnorm(16),4,4)
+#'  X1[2:3,3:4] = NA
+#'  X3 = standardize(X1,X2,na.rm=TRUE)
+#'  }
+#' }
+#' @references
+#' https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
+#' @rdname standardize
+#' @export
 standardize <- function(X1,X2,...){
 
   X1 = as.matrix(X1)
@@ -227,29 +196,28 @@ standardize <- function(X1,X2,...){
 
 # ------------------------------------------------------------------------------
 
-#' This function de-standardizes an input matrix 'X2' with the option to disclude
+#' @title De-standardize the Columns of a Matrix Based on Another Matrix
+#' @description
+#' This function de-standardizes an input matrix 'X2' with the option to exclude
 #' NA values from the de-scaling (see example below) according to the content
 #' (mean and standard deviation values) of standardizing matrix 'X1'.
-#'
-#' Inputs:
-#' @param X1 - input matrix whose properties are used in de-standardization [N x D]
-#' @param X2 - input matrix to de-standardize based on properties of X1 [M x D]
-#'
-#' Output:
-#' @param Xds - de-standardized input matrix X2 [M x D]
-
-#' Reference:
-#'
-#'  https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
-#'
-#'Example of use:
-#'
-# X1 = matrix(runif(16),4,4)
-# X2 = X1
-# X1[2:3,3:4] = NA
-# Xds2 = de_standardize(X1,X2,na.rm=TRUE)
-
-
+#' @param X1 input matrix whose properties are used in de-standardization \[N x D\]
+#' @param X2 input matrix to de-standardize based on properties of X1 \[M x D\]
+#' @param ... further arguments to `mean()` and `std()`
+#' @return de-standardized input matrix X2 \[M x D\]
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  X1 = matrix(runif(16),4,4)
+#'  X2 = rnorm(rnorm(16),4,4)
+#'  X1[2:3,3:4] = NA
+#'  X3 = de_standardize(X1,X2,na.rm=TRUE)
+#'  }
+#' }
+#' @references
+#' https://stackoverflow.com/questions/5468280/scale-a-series-between-two-points
+#' @rdname de_standardize
+#' @export
 de_standardize <- function(X1,X2,...){
 
   X1 = as.matrix(X1)
@@ -278,6 +246,8 @@ de_standardize <- function(X1,X2,...){
 
 # ------------------------------------------------------------------------------
 
+# This function time lags the target variable based on the lead time and
+# required time delay.
 lagmatrix <- function(x,max.lag){embed(c(rep(NA,max.lag),x),max.lag+1)}
 
 # Example
@@ -296,33 +266,16 @@ lagmatrix <- function(x,max.lag){embed(c(rep(NA,max.lag),x),max.lag+1)}
 
 # ------------------------------------------------------------------------------
 
-#' This function time lags the target variable based on the lead time and
-#' required time delay.
-#'
-#' Input(s):
-#' @param N: number of time series records [scalar]
-#' @param nval: number of validation records [scalar]
-#' @param ntst: number of test records [scalar]
-#'
-#' Output:
-#' list that holds calibration, validation, and test indices
-#'
-#'  Reference(s):
-#'
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 11, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-
+#' @title Get train, validation and test set indices
+#' @description
+#' This function provides train, validation and test set indices in a sequential fashion.
+#' The user must provide the desired validation set size `nval` and test set size `ntst`.
+#' @param N number of time series records \[scalar\]
+#' @param nval number of validation records \[scalar\]
+#' @param ntst number of test records \[scalar\]
+#' @return list that holds training, validation, and test indices
+#' @rdname partitionInds
+#' @export
 partitionInds <- function(N,nval,ntst){
 
   ind_t = seq(N - ntst + 1, N, by=1) # test indices
@@ -338,15 +291,10 @@ partitionInds <- function(N,nval,ntst){
 
 # ------------------------------------------------------------------------------
 
-#' This function creates a periodic sequence at the yearly scale using
-#' either monthly, daily, or hourly dates.  If desired, a phase component
-#' can also be included.
-#'
-#'
-#' Date created: Oct. 1, 2018
-#'
-#' Author: JQ
-#'
+# This function creates a periodic sequence at the yearly scale using
+# either monthly, daily, or hourly dates.  If desired, a phase component
+# can also be included.
+
 time2sine = function(dte=seq(as.Date("1910/1/1"), as.Date("1999/12/30"), "days"),
                      phase=0,timescale = "daily"){
 
@@ -395,32 +343,16 @@ write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
 
 # ------------------------------------------------------------------------------
 
-#' This function time lags the input variables based on the lead time and
-#' required time delay.
-#'
-#' Input(s):
-#' @param x: input time series [N x D]
-#' @param leadtime: forecast lead time [scalar >= 0]
-#' @param timedelays: number of time delays [vector (of scalar >= 1)]
-#'
-#' Output:
-#' @param y: input matrix based forecast lead time and time delays [N x D +sum(timedelays)]
-#'
-#'  Reference(s):
-#'
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Jul. 25, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
+# This function time lags the input variables based on the lead time and
+# required time delay.
+
+# Input(s):
+# @param x: input time series [N x D]
+# @param leadtime: forecast lead time [scalar >= 0]
+# @param timedelays: number of time delays [vector (of scalar >= 1)]
+
+# Output:
+# @param y: input matrix based forecast lead time and time delays [N x D +sum(timedelays)]
 
 xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
@@ -498,32 +430,16 @@ xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
 # ------------------------------------------------------------------------------
 
-#' This function time lags the target variable based on the lead time and
-#' required time delay.
-#'
-#' Input(s):
-#' @param y: time series [N x 1]
-#' @param leadtime: forecast lead time [scalar >= 0]
-#' @param timedelay: number of time delays [scalar >= 1]
-#'
-#' Output:
-#' @param y: forecast lead time and time delay matrix [N x timedelay+1]
-#'
-#'  Reference(s):
-#'
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Jul. 25, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
+# This function time lags the target variable based on the lead time and
+# required time delay.
+
+# Input(s):
+# @param y: time series [N x 1]
+# @param leadtime: forecast lead time [scalar >= 0]
+# @param timedelay: number of time delays [scalar >= 1]
+
+# Output:
+# @param y: forecast lead time and time delay matrix [N x timedelay+1]
 
 yLeadTimeDelay <- function(x,leadtime=1,timedelay=1){
 
@@ -550,35 +466,19 @@ yLeadTimeDelay <- function(x,leadtime=1,timedelay=1){
 
 # ------------------------------------------------------------------------------
 
+#' @title Lag Input Variables
+#' @description
 #' This function time lags the input variables based on the lead time and
 #' required time delay.
-#'
-#' Input(s):
-#' @param x: input time series [N x D]
-#' @param leadtime: forecast lead time [scalar >= 0]
-#' @param timedelays: number of time delays [vector (of scalar >= 0)]
-#'
-#' Output:
-#' @param y: input matrix based forecast lead time and time delays [N x D + sum(timedelays)]
-#'
-#'  Reference(s):
-#'
-#'  Based on 'xLeadTimeDelay.R' function (used only for forecasting).  This
-#'  function can be used for both modeling and forecasting.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 12, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-
+#' @param x input time series \[N x D\]
+#' @param leadtime forecast lead time \[scalar >= 0\], Default: 1
+#' @param timedelays number of time delays \[vector (of scalar >= 0)\], Default: NULL
+#' @return input matrix based forecast lead time and time delays \[N x D + sum(timedelays)\]
+#' @details
+#' Based on the internal 'xLeadTimeDelay' function (used only for forecasting); See source code. This
+#' function can be used for both modeling and forecasting.
+#' @rdname xLTD
+#' @export
 xLTD <- function(x,leadtime=1,timedelays=NULL){
 
   x = as.matrix(x)
@@ -711,36 +611,20 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 
 # ------------------------------------------------------------------------------
 
+#' @title Lag Target Variables
+#' @description
 #' This function time lags the target variable based on the lead time and
 #' required time delay.
-#'
-#' Input(s):
-#' @param y: time series [N x 1]
-#' @param leadtime: forecast lead time [scalar >= 0]
-#' @param timedelay: number of time delays [scalar >= 0]
-#'
-#' Output:
-#' @param y: forecast lead time and time delay matrix [N x timedelay+1]
-#'
-#'  Reference(s):
-#'
-#'  Based on 'yLeadTimeDelay.R' function (used only for forecasting).  This
-#'  function can be used for both modeling and forecasting.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 12, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-
-yLTD <- function(x,leadtime=1,timedelay=1){
+#' @param y time series \[N x 1\]
+#' @param leadtime forecast lead time \[scalar >= 0\], Default: 1
+#' @param timedelay number of time delays \[scalar >= 0\], Default: 1
+#' @return forecast lead time and time delay matrix \[N x timedelay+1\]
+#' @details
+#' Based on the internal 'yLeadTimeDelay' function (used only for forecasting);See source code. This
+#' function can be used for both modeling and forecasting.
+#' @rdname yLTD
+#' @export
+yLTD <- function(y,leadtime=1,timedelay=1){
 
   # case 1 #############################################################
 
