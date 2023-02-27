@@ -93,16 +93,16 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                   cutoff0=FALSE, light=TRUE, savefile=FALSE){
 
   ###########################################################################
-  #' HIGH LEVEL SETTINGS
+  # HIGH LEVEL SETTINGS
   ###########################################################################
 
-  set.seed(123) # make reproducible
+  # set.seed(123) # make reproducible
 
   y = as.matrix(y)
   if( !is.null(x) ){ x = as.matrix(x)}
   if( !is.null(z) ) {z = as.matrix(z)}
 
-  #' store model settings
+  # store model settings
 
   mdl = c(as.list(environment()), list())
 
@@ -116,27 +116,27 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
 
   ###########################################################################
-  #' CREATE INPUT-OUTPUT (IO) DATASET
+  # CREATE INPUT-OUTPUT (IO) DATASET
   ###########################################################################
 
-  #' create IO dataset (lags input-output dataset and peforms wavelet-
-  #' decomposition, if needed)
+  # create IO dataset (lags input-output dataset and peforms wavelet-
+  # decomposition, if needed)
 
   IO.pd = prepareData(y=y,x=x,z=z,leadtime,lag_Y,lag_X,
                       wfm,wt,wavelet,decomp_level)
 
-  #' adjust IO dataset for boundary-condition (very important for wavelet-
-  #' based models)
+  # adjust IO dataset for boundary-condition (very important for wavelet-
+  # based models)
 
   IO.od = organizeIOData(IO.pd,max_decomp_level,max_wavelet_length)
   nbc = ((2^max_decomp_level) - 1) * (max_wavelet_length - 1) + 1
   mdl$num_boundary_coefs = nbc
 
   ###########################################################################
-  #' PARTITION INPUT-OUTPUT (IO) DATASET
+  # PARTITION INPUT-OUTPUT (IO) DATASET
   ###########################################################################
 
-  #' partition IO dataset
+  # partition IO dataset
 
   N = nrow(IO.od[[1]])
   IO.inds = partitionInds(N,nval,ntst)
@@ -144,38 +144,38 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
   ###########################################################################
   ###########################################################################
 
-  #' PERFORM:
-  #'          1) DATA-SCALING (OPTIONAL)
-  #'          2) INPUT VARIBALE SELECTION (IVS);
-  #'          3) DATA-DRIVEN MODEL (DDM) CALIBRATION;
-  #'          4) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST SETS)
+  # PERFORM:
+  #          1) DATA-SCALING (OPTIONAL)
+  #          2) INPUT VARIBALE SELECTION (IVS);
+  #          3) DATA-DRIVEN MODEL (DDM) CALIBRATION;
+  #          4) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST SETS)
 
-  #' NOTE!
-  #'
-  #' IO.od contains a set of lists (at least one) that depends on:
-  #'
-  #' 1) whether a wavelet-based forecasting model is used; and
-  #' 2) the type of wavelet-based forecast model ('within','across',
-  #'    'within-hybrid', and 'across-hybrid') contain J+1 lists,
-  #'    each related to a different scale for the wavelet and scaling
-  #'    coefficients
-  #'
-  #' Therefore, data-scaling (optional), IVS, DDM calibration and
-  #' prediction is done in a for loop with bounds between 1 and J + 1 times.
+  # NOTE!
+  #
+  # IO.od contains a set of lists (at least one) that depends on:
+  #
+  # 1) whether a wavelet-based forecasting model is used; and
+  # 2) the type of wavelet-based forecast model ('within','across',
+  #    'within-hybrid', and 'across-hybrid') contain J+1 lists,
+  #    each related to a different scale for the wavelet and scaling
+  #    coefficients
+  #
+  # Therefore, data-scaling (optional), IVS, DDM calibration and
+  # prediction is done in a for loop with bounds between 1 and J + 1 times.
 
   ###########################################################################
   ###########################################################################
 
-  #' for each item in the list perform:
-  #'
-  #'   1) DATA-SCALING (OPTIONAL);
-  #'   2) IVS;
-  #'   3) DDM CALIBRATION; AND
-  #'   4) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST SETS)
+  # for each item in the list perform:
+  #
+  #   1) DATA-SCALING (OPTIONAL);
+  #   2) IVS;
+  #   3) DDM CALIBRATION; AND
+  #   4) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST SETS)
 
-  #' preallocate space for the model predictions (this vector is aggregated)
-  #' through the loop below in the case of particular wavelet-based
-  #' forecasting models such as 'within' or 'across')
+  # preallocate space for the model predictions (this vector is aggregated)
+  # through the loop below in the case of particular wavelet-based
+  # forecasting models such as 'within' or 'across')
 
   pred = matrix(0,N,1)
   targ = matrix(0,N,1)
@@ -185,7 +185,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
   for ( i in 1 : length (IO.od)){
 
     ###########################################################################
-    #' DATA-SCALING (OPTIONAL)
+    # DATA-SCALING (OPTIONAL)
     ###########################################################################
 
     IO.s = scale_ab(IO.od[[i]][IO.inds$indc,],IO.od[[i]],0,1)
@@ -208,7 +208,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
 
     ###########################################################################
-    #' PERFORM INPUT VARIABLE SELECTION (IVS)
+    # PERFORM INPUT VARIABLE SELECTION (IVS)
     ###########################################################################
 
     IO.ivs[[i]] = ivsIOData(y=IO.s[IO.inds$indc,1],
@@ -216,7 +216,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                             ivsm,ivs_param)
 
     ###########################################################################
-    #' CALIBRATE DATA-DRIVEN MODEL (DDM)
+    # CALIBRATE DATA-DRIVEN MODEL (DDM)
     ###########################################################################
 
     IO.ddm[[i]] = calibrateDDM(yc=IO.s[IO.inds$indc,1],
@@ -225,16 +225,16 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                                ddm,ddm_param)
 
     ###########################################################################
-    #' MAKE PREDICTIONS USING CALIBRATED DATA-DRIVEN MODEL (DDM)
+    # MAKE PREDICTIONS USING CALIBRATED DATA-DRIVEN MODEL (DDM)
     ###########################################################################
 
-    #' get target (if certain types of wavelet-based forecasting models are
-    #' used (e.g., 'within' or 'across'), then target is aggregated across
-    #' the different scales)
+    # get target (if certain types of wavelet-based forecasting models are
+    # used (e.g., 'within' or 'across'), then target is aggregated across
+    # the different scales)
 
     targ = targ + IO.od[[i]][,1]
 
-    #' make predictions using the calibrated model
+    # make predictions using the calibrated model
 
     ptemp = predictDDM(x=IO.s[,IO.ivs[[i]]$names_sel_inputs],
                        xc=IO.s[IO.inds$indc,
@@ -242,38 +242,38 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                        yc=IO.s[IO.inds$indc,1],
                        ddm,ddm_param,IO.ddm[[i]])
 
-    #' if required, rescale predictions to target scale
+    # if required, rescale predictions to target scale
 
     if(scale_target){
 
       ptemp = de_scale_ab(as.matrix(IO.od[[i]][IO.inds$indc,1]),
                           as.matrix(ptemp),0,1)
 
-      }
+    }
 
-    #' final model predictions (if certain types of wavelet-based
-    #' forecasting models are used (e.g., 'within' or 'across' ), then
-    #' 'pred' will aggregate predictions across scales)
+    # final model predictions (if certain types of wavelet-based
+    # forecasting models are used (e.g., 'within' or 'across' ), then
+    # 'pred' will aggregate predictions across scales)
 
     pred = pred + ptemp
 
   }
 
-  #' if required, ensure only non-negative values are used
+  # if required, ensure only non-negative values are used
 
   if(cutoff0){ pred[pred < 0] = 0}
 
-  #' get wddff performance
+  # get wddff performance
 
   perf_c = gof(obs=targ[IO.inds$indc], sim=pred[IO.inds$indc])
   perf_v = gof(obs=targ[IO.inds$indv], sim=pred[IO.inds$indv])
   perf_t = gof(obs=targ[IO.inds$indt], sim=pred[IO.inds$indt])
 
   ###########################################################################
-  #' STORE (AND, IF REQUIRED, SAVE) RESULTS
+  # STORE (AND, IF REQUIRED, SAVE) RESULTS
   ###########################################################################
 
-  #' results of wddff model
+  # results of wddff model
 
   rslt = list()
   rslt$predictions = pred
@@ -288,7 +288,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
   rslt$perf_v = perf_v
   rslt$perf_t = perf_t
 
-  #' if required, save results to .rda file
+  # if required, save results to .rda file
 
   if( savefile ){
 
@@ -303,7 +303,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
   }
 
-  #' return results to user
+  # return results to user
 
   return( list(
 
@@ -376,22 +376,22 @@ upd.wddff <- function(mdl_rslt,
                       light=TRUE, savefile=FALSE){
 
   ###########################################################################
-  #' HIGH LEVEL SETTINGS
+  # HIGH LEVEL SETTINGS
   ###########################################################################
 
   set.seed(123) # make reproducible
 
   ###########################################################################
-  #' SET NEW MODEL STRUCTURE AND UPDATE VARIABLES
+  # SET NEW MODEL STRUCTURE AND UPDATE VARIABLES
   ###########################################################################
 
-  #' set model structure
+  # set model structure
 
   mdl = mdl_rslt$mdl # transfer old model settings to new mdl
   rslt = mdl_rslt$rslt # transfer old model results to new mdl
   rm(mdl_rslt) # remove old model settings and results
 
-  #' update target and inputs (if any)
+  # update target and inputs (if any)
 
   y = as.matrix(y)
   y = rbind(mdl$y, y)
@@ -423,26 +423,26 @@ upd.wddff <- function(mdl_rslt,
 
 
   ###########################################################################
-  #' CREATE INPUT-OUTPUT (IO) DATASET
+  # CREATE INPUT-OUTPUT (IO) DATASET
   ###########################################################################
 
-  #' create IO dataset (lags input-output dataset and peforms wavelet-
-  #' decomposition, if needed)
+  # create IO dataset (lags input-output dataset and peforms wavelet-
+  # decomposition, if needed)
 
   IO.pd = prepareData(y=y,x=x,z=z,mdl$leadtime,mdl$lag_Y,mdl$lag_X,
                       mdl$wfm,mdl$wt,mdl$wavelet,mdl$decomp_level)
 
-  #' adjust IO dataset for boundary-condition (very important for wavelet-
-  #' based models)
+  # adjust IO dataset for boundary-condition (very important for wavelet-
+  # based models)
 
   IO.od = organizeIOData(IO.pd,mdl$max_decomp_level,mdl$max_wavelet_length)
 
   ###########################################################################
-  #' IDENTIFY INDICES OF NEW DATA AND CREATE NEW TEST PARTITION
+  # IDENTIFY INDICES OF NEW DATA AND CREATE NEW TEST PARTITION
   ###########################################################################
 
-  #' create a new 'forecast' parition based on new data and update 'test'
-  #' partition
+  # create a new 'forecast' parition based on new data and update 'test'
+  # partition
 
   old.N = rslt$n.inds
   N = nrow(IO.od[[1]])
@@ -457,35 +457,35 @@ upd.wddff <- function(mdl_rslt,
   ###########################################################################
   ###########################################################################
 
-  #' PERFORM:
-  #'          1) DATA-SCALING (OPTIONAL)
-  #'          2) DATA-DRIVEN MODEL (DDM) PREDICTION (FOR CALIBRATION,
-  #'             VALIDATION, TEST, FORECAST SETS)
+  # PERFORM:
+  #          1) DATA-SCALING (OPTIONAL)
+  #          2) DATA-DRIVEN MODEL (DDM) PREDICTION (FOR CALIBRATION,
+  #             VALIDATION, TEST, FORECAST SETS)
 
-  #' NOTE!
-  #'
-  #' IO.od contains a set of lists (at least one) that depends on:
-  #'
-  #' 1) whether a wavelet-based forecasting model is used; and
-  #' 2) the type of wavelet-based forecast model ('within','across',
-  #'    'within-hybrid', and 'across-hybrid') contain J+1 lists,
-  #'    each related to a different scale for the wavelet and scaling
-  #'    coefficients
-  #'
-  #' Therefore, data-scaling (optional) and DDM prediction is done in a
-  #' for loop with bounds between 1 and J + 1 times.
+  # NOTE!
+  #
+  # IO.od contains a set of lists (at least one) that depends on:
+  #
+  # 1) whether a wavelet-based forecasting model is used; and
+  # 2) the type of wavelet-based forecast model ('within','across',
+  #    'within-hybrid', and 'across-hybrid') contain J+1 lists,
+  #    each related to a different scale for the wavelet and scaling
+  #    coefficients
+  #
+  # Therefore, data-scaling (optional) and DDM prediction is done in a
+  # for loop with bounds between 1 and J + 1 times.
 
   ###########################################################################
   ###########################################################################
 
-  #' for each item in the list perform:
-  #'
-  #'   1) DATA-SCALING (OPTIONAL);
-  #'   2) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST, FORECAST SETS)
+  # for each item in the list perform:
+  #
+  #   1) DATA-SCALING (OPTIONAL);
+  #   2) DDM PREDICTION (FOR CALIBRATION, VALIDATION, TEST, FORECAST SETS)
 
-  #' preallocate space for the model predictions (this vector is aggregated)
-  #' through the loop below in the case of particular wavelet-based
-  #' forecasting models such as 'within' or 'across')
+  # preallocate space for the model predictions (this vector is aggregated)
+  # through the loop below in the case of particular wavelet-based
+  # forecasting models such as 'within' or 'across')
 
   pred = matrix(0,length(indf),1)
   targ = matrix(0,length(indf),1)
@@ -493,7 +493,7 @@ upd.wddff <- function(mdl_rslt,
   for ( i in 1 : length (IO.od)){
 
     ###########################################################################
-    #' DATA-SCALING (OPTIONAL)
+    # DATA-SCALING (OPTIONAL)
     ###########################################################################
 
     IO.s = scale_ab(IO.od[[i]][rslt$indc,],IO.od[[i]],0,1)
@@ -513,23 +513,23 @@ upd.wddff <- function(mdl_rslt,
     }
 
     ###########################################################################
-    #' MAKE PREDICTIONS USING PRE-CALIBRATED DATA-DRIVEN MODEL (DDM)
+    # MAKE PREDICTIONS USING PRE-CALIBRATED DATA-DRIVEN MODEL (DDM)
     ###########################################################################
 
-    #' get target (if certain types of wavelet-based forecasting models are
-    #' used (e.g., 'within' or 'across'), then target is aggregated across
-    #' the different scales)
+    # get target (if certain types of wavelet-based forecasting models are
+    # used (e.g., 'within' or 'across'), then target is aggregated across
+    # the different scales)
 
     targ = targ + IO.od[[i]][indf,1]
 
-    #' make predictions using the calibrated model
+    # make predictions using the calibrated model
 
     ptemp = predictDDM(x=IO.s[indf,rslt$ivs[[i]]$names_sel_inputs],
                        xc=IO.s[rslt$indc,rslt$ivs[[i]]$names_sel_inputs],
                        yc=IO.s[rslt$indc,1],
                        mdl$ddm,mdl$ddm_param,rslt$ddm[[i]])
 
-    #' if required, rescale predictions to target scale
+    # if required, rescale predictions to target scale
 
     if(mdl$scale_target){
 
@@ -538,19 +538,19 @@ upd.wddff <- function(mdl_rslt,
 
     }
 
-    #' final model predictions (if certain types of wavelet-based
-    #' forecasting models are used (e.g., 'within' or 'across' ), then
-    #' 'pred' will aggregate predictions across scales)
+    # final model predictions (if certain types of wavelet-based
+    # forecasting models are used (e.g., 'within' or 'across' ), then
+    # 'pred' will aggregate predictions across scales)
 
     pred = pred + ptemp
 
   }
 
-  #' if required, ensure only non-negative values are used
+  # if required, ensure only non-negative values are used
 
   if(mdl$cutoff0){ pred[pred < 0] = 0}
 
-  #' get wddff performance for new test set
+  # get wddff performance for new test set
 
   target = rbind(rslt$target,targ)
   predictions = rbind(rslt$predictions,pred)
@@ -558,21 +558,21 @@ upd.wddff <- function(mdl_rslt,
   perf_t = gof(obs = target[rslt$indt], sim = predictions[rslt$indt])
 
   ###########################################################################
-  #' STORE (AND, IF REQUIRED, SAVE) RESULTS
+  # STORE (AND, IF REQUIRED, SAVE) RESULTS
   ###########################################################################
 
-  #' results of updated wddff model
+  # results of updated wddff model
 
   rslt$predictions = predictions
   rslt$target = target
   rslt$perf_v = perf_v
   rslt$perf_t = perf_t
 
-  #' if required, save results to .rda file
+  # if required, save results to .rda file
 
   if( savefile ){
 
-    #' append update number to original WDDFF model
+    # append update number to original WDDFF model
 
     filename = paste0('upd_',length(mdl$filename),'_',mdl$filename[1])
     mdl$filename = c(mdl$filename,filename)
@@ -581,7 +581,7 @@ upd.wddff <- function(mdl_rslt,
 
   }
 
-  #' return results to user
+  # return results to user
 
   return( list(
 
