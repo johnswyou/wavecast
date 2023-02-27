@@ -1,64 +1,74 @@
+#' @title Wavelet Data-Driven Forecasting Framework (WDDFF)
+#' @description
 #' This function calibrates a model and generates predictions using the
 #' Wavelet Data-Driven Forecasting Framework (WDDFF) based on the work in
 #' Quilty and Adamowski (2018).
-#'
-#' Inputs:
-#' @param y: target time series [N x 1]
-#' @param x: input time series [N x D]
-#' @param z: auxilliary input time series [N x C]
-#' @param leadtime: forecast lead time [scalar >= 0]
-#' @param lag_Y: number of time delays for target [scalar >= 1]
-#' @param lag_X: number of time delays [vector (or scalar >= 1)]
-#' @param nval - number of validation records [scalar]
-#' @param ntst - number of test records [scalar]
-#' @param wfm - wavelet-based forecasting method [string: 'none', 'single', 'within', 'across','single-hybrid','within-hybrid','across-hybrid']
-#' @param wt - type of wavelet transform [string; 'at','modwt']
-#' @param wavelet - scaling filter name [string; 'haar', 'db2', 'db4', 'coif1', etc.]
-#' @param decomp_level - decomposition level [1 < integer << N/2]
-#' @param max_decomp_level - maximum decomposition level [scalar >= decomp_level]
-#' @param max_wavelet_length - maxmimum wavelet filter length [scalar >= length(wavelet)]
-#' @param ivsm - input variable selection (IVS) method
-#'   [string:'none','boruta','rrf','ea_cmi_htc','ea_cmi_tol','knn_cmi_tol','knn_cmi_bi_tol',pmis_bic','pcis_bic']
-#' @param ivs_param - parameters for input variable selection method
-#'                    'rrf': ivs_param[1] = ntrees [integer > 1)] usually between 128 and 1000
-#'                           ivs_param[2] = regularization parameter [0 < scalar <= 1]
-#'                    'ea_cmi': ivs_param[1] =  Hampel test criterion threshold [scalar > 0]
-#'                    'ea_cmi_tol': ivs_param[1] = CMI/MI threshold [0 < scalar <= 1]
-#'                                  ivs_param[2] = no. of nearest neighbours [1 < integer < sample size-1]
-#'                    'knn_cmi_tol': ivs_param[1] = CMI/MI threshold [0 < scalar <= 1]
-#'                                   ivs_param[2] = no. of nearest neighbours [1 < integer < sample size-1]
-#' @param ddm - data-driven model [string: 'spov','knnr','grnn','rrf']
-#' @param ddm_param - data-driven model hyper-parameter(s)
-#'                    'spov': ddm_param[1] = model order [1 < integer <= 3]
-#'                    'knnr': ddm_param[1] = no. of nearest neighbours [1 < integer < sample size-1]
-#'                    'grnn': no ddm_param as kernel bandwidth determined automatically
-#'                    'rrf': ddm_param[1] = ntrees [(1,500)]
-#' @param scale_inputs - scale inputs (predictors) [0,1] [binary]
-#' @param scale_target - scale target (predictand) [0,1] [binary]
-#' @param cutoff0 - ensure that all predictions > 0 [binary]
-#' @param light - store all function inputs or neglect 'y', 'x', and 'z' [binary]
-#' @param savefile - save file using function name and current Sys.time() [binary]
-#'
-#' Output:
-#' mdl_rslt [list] that contains:
-#' mdl [list] that includes all function inputs
-    #' this list does not include 'y', 'x', and 'z' if 'light' = TRUE
-#' rslt [list],
-    #' predictions,
-    #' target,
-    #' residual,
-    #' n.inds,
-    #' indc,
-    #' indv,
-    #' indt,
-    #' ivs,
-    #' ddm,
-    #' perf_c,
-    #' perf_v,
-    #' perf_t
-#'
-#' Reference(s):
-#'
+#' @param y target time series \[N x 1\]
+#' @param x input time series \[N x D\]
+#' @param z auxilliary input time series \[N x C\]
+#' @param leadtime forecast lead time \[scalar >= 0\]
+#' @param lag_Y number of time delays for target \[scalar >= 1\]
+#' @param lag_X number of time delays \[vector (or scalar >= 1)\]
+#' @param nval number of validation records \[scalar\]
+#' @param ntst number of test records \[scalar\]
+#' @param wfm wavelet-based forecasting method \[string: 'none', 'single', 'within', 'across','single-hybrid','within-hybrid','across-hybrid'\]
+#' @param wt type of wavelet transform \[string; 'at','modwt'\]
+#' @param wavelet scaling filter name \[string; 'haar', 'db2', 'db4', 'coif1', etc.\]
+#' @param decomp_level decomposition level \[1 < integer << N/2\]
+#' @param max_decomp_level maximum decomposition level \[scalar >= decomp_level\]
+#' @param max_wavelet_length maxmimum wavelet filter length \[scalar >= length(wavelet)\]
+#' @param ivsm input variable selection (IVS) method
+#'   \[string:'none','boruta','rrf','ea_cmi_htc','ea_cmi_tol','knn_cmi_tol','knn_cmi_bi_tol',pmis_bic','pcis_bic'\]
+#' @param ivs_param parameters for input variable selection method
+#' \itemize{
+#' \item `rrf`:
+#' \itemize{
+#' \item ivs_param\[1\] = ntrees \[integer > 1)\] usually between 128 and 1000
+#' \item ivs_param\[2\] = regularization parameter \[0 < scalar <= 1\]}
+#' \item `ea_cmi`:
+#' \itemize{
+#' \item ivs_param\[1\] =  Hampel test criterion threshold \[scalar > 0\]}
+#' \item `ea_cmi_tol`:
+#' \itemize{
+#' \item ivs_param\[1\] = CMI/MI threshold \[0 < scalar <= 1\]
+#' \item ivs_param\[2\] = no. of nearest neighbours \[1 < integer < sample size-1\]}
+#' \item `knn_cmi_tol`:
+#' \itemize{
+#' \item ivs_param\[1\] = CMI/MI threshold \[0 < scalar <= 1\]
+#' \item ivs_param\[2\] = no. of nearest neighbours \[1 < integer < sample size-1\]}
+#' }
+#' @param ddm data-driven model \[string: 'spov','knnr','grnn','rrf'\]
+#' @param ddm_param data-driven model hyper-parameter(s)
+#' - 'spov': ddm_param\[1\] = model order \[1 < integer <= 3\]
+#' - 'knnr': ddm_param\[1\] = no. of nearest neighbours \[1 < integer < sample size-1\]
+#' - 'grnn': no ddm_param as kernel bandwidth determined automatically
+#' - 'rrf': ddm_param\[1\] = ntrees \[(1,500)\]
+#' @param scale_inputs scale inputs (predictors) \[0,1\] \[binary\]
+#' @param scale_target scale target (predictand) \[0,1\] \[binary\]
+#' @param cutoff0 ensure that all predictions > 0 \[binary\]
+#' @param light store all function inputs or neglect 'y', 'x', and 'z' \[binary\]
+#' @param savefile save file using function name and current Sys.time() \[binary\]
+#' @return
+#' mdl_rslt \[list\] that contains:
+#' \itemize{
+#' \item mdl \[list\] that includes all function inputs
+#' (this list does not include 'y', 'x', and 'z' if 'light' = `TRUE`)
+#' \item rslt \[list\],
+#' \itemize{
+#' \item predictions,
+#' \item target,
+#' \item residual,
+#' \item n.inds,
+#' \item indc,
+#' \item indv,
+#' \item indt,
+#' \item ivs,
+#' \item ddm,
+#' \item perf_c,
+#' \item perf_v,
+#' \item perf_t}
+#' }
+#' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
 #' selection method for water resources modeling, Water Resour. Res., 52,
@@ -68,21 +78,8 @@
 #' based hydrological and water resources forecasting models for real-world
 #' applications with best practices and a new forecasting framework, J. Hydrol.,
 #' doi:10.1016/j.jhydrol.2018.05.003.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 26, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-#'
-
+#' @rdname wddff
+#' @export
 wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                   nval=1, ntst=1,
                   wfm='none', wt='at', wavelet='haar',
@@ -316,37 +313,34 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
 # ------------------------------------------------------------------------------
 
+#' @title Update WDDFF With New Data
+#' @references
 #' This function takes in new time series measurements for the target and
 #' input time series (standard and/or auxilliary), performs time-lagging,
 #' (wavelet-decomposition,) and generates predictions given an exisiting
 #' Wavelet Data-Driven Forecasting Framework (WDDFF) model.
-#'
-#' Inputs:
-#' @param mdl_rslt [list] that contains all essential inputs from 'wddff'
-#' @param y: new target time series [N x 1]
-#' @param x: new input time series [N x D]
-#' @param z: new auxilliary input time series [N x C]
-#' @param light - store all function inputs or neglect 'y', 'x', and 'z' [binary]
-#' @param savefile - save file using function name and current Sys.time() [binary]
-#'
-#' Output:
+#' @param mdl_rslt list that contains all essential inputs from 'wddff'
+#' @param y new target time series \[N x 1\]
+#' @param x new input time series \[N x D\]
+#' @param z new auxilliary input time series \[N x C\]
+#' @param light store all function inputs or neglect 'y', 'x', and 'z' \[binary\]
+#' @param savefile save file using function name and current Sys.time() \[binary\]
+#' @return
 #' list that contains:
-#' mdl,
-#' predictions,
-#' target,
-#' residual,
-#' n.inds,
-#' indc,
-#' indv,
-#' indt,
-#' ivs,
-#' ddm,
-#' perf_c,
-#' perf_v,
-#' perf_t
-#'
-#' Reference(s):
-#'
+#' - mdl
+#' - predictions
+#' - target
+#' - residual
+#' - n.inds
+#' - indc
+#' - indv
+#' - indt
+#' - ivs
+#' - ddm
+#' - perf_c
+#' - perf_v
+#' - perf_t
+#' @references
 #' Quilty, J., J. Adamowski, B. Khalil, and M. Rathinasamy (2016), Bootstrap rank-
 #' ordered conditional mutual information (broCMI): A nonlinear input variable
 #' selection method for water resources modeling, Water Resour. Res., 52,
@@ -356,21 +350,8 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 #' based hydrological and water resources forecasting models for real-world
 #' applications with best practices and a new forecasting framework, J. Hydrol.,
 #' doi:10.1016/j.jhydrol.2018.05.003.
-#'
-#'  Author:
-#'
-#'  John Quilty
-#'
-#'  Date Created:
-#'
-#'  Sep. 26, 2018
-#'
-#'  Date(s) Modified:
-#'
-#'
-#'  START...
-#'
-
+#' @rdname upd.wddff
+#' @export
 upd.wddff <- function(mdl_rslt,
                       y, x=NULL, z=NULL,
                       light=TRUE, savefile=FALSE){
@@ -594,32 +575,25 @@ upd.wddff <- function(mdl_rslt,
 
 # ------------------------------------------------------------------------------
 
+#' @title Model Agnostic WDDFF
+#' @description
 #' This function creates input-output (IO) datasets for a given wavelet-based
 #' forecasting method, the number of time series lags to consider as predictors,
 #' and the number of boundary-effected coefficients to remove.
-#'
-#' #' Inputs:
-#' @param ts - time series [N x 1]
-#' @param W_ts - wavelet decomposed time series [N x J+1]
-#' @param wfm - wavelet-based forecasting method [string; 'single', 'within', 'across','single_hybrid','within_hybrid','across_hybrid']
-#' @param lags - lag length to include as predictors [integer >= 0]
-#' @param maxlag - maximum lag length [1 < integer <= lags]
-#' @param nbc - number of boundary-effected coefficients [integer >= 0]
-#'
-#' Output:
-#' @param IO - list of input-output dataset(s) according to wfm [N x D x J+1]
-#'
-#' Date created: May 15, 2018
-#' Date updated: June 14, 2018
-#'
-#' Reference(s):
-#'
+#' @param ts time series/matrix/vector \[N x 1\]
+#' @param W_ts wavelet decomposed time series \[N x J+1\]
+#' @param wfm wavelet-based forecasting method \[string; 'single', 'within', 'across','single_hybrid','within_hybrid','across_hybrid'\]
+#' @param lags lag length to include as predictors \[integer >= 0\]
+#' @param maxlag maximum lag length \[1 < integer <= lags\]
+#' @param nbc number of boundary-effected coefficients \[integer >= 0\]
+#' @return list of input-output dataset(s) according to wfm \[N x D x J+1\]
+#' @references
 #' Quilty, J., and J. Adamowski (2018), Addressing the incorrect usage of wavelet-
 #' based hydrological and water resources forecasting models for real-world
 #' applications with best practices and a new forecasting framework, J. Hydrol.,
 #' doi:10.1016/j.jhydrol.2018.05.003.
-#'
-
+#' @rdname wddff.wfm
+#' @export
 wddff.wfm <- function(ts,W_ts,wfm,lags,maxlag,nbc){
 
   J = ncol(W_ts)
@@ -786,53 +760,53 @@ wddff.wfm <- function(ts,W_ts,wfm,lags,maxlag,nbc){
 
 # ------------------------------------------------------------------------------
 
-#' This function performs wavelet decomposition using the à trous algorithm (AT) or
-#' the maximal overlap discrete wavelet transform (MODWT).
-#'
-#' #' Inputs:
-#' @param ts - time series [N x 1]
-#' @param wt - type of wavelet transform [string; at','modwt']
-#' @param wavelet - scaling filter name [string]
-#' @param decomp_level - decomposition level [1 < integer < N/2]
-#'
-#' Output:
-#' @param W - wavelet and scaling coefficients [N x D x J+1] (wavelet coefs in first J columns)
-#'
-#' Date created: May 15, 2018
-#' Date updated: May 15, 2018
-#'
-#' Reference(s):
-#'
-#' Quilty, J., and J. Adamowski (2018), Addressing the incorrect usage of wavelet-
-#' based hydrological and water resources forecasting models for real-world
-#' applications with best practices and a new forecasting framework, J. Hydrol.,
-#' doi:10.1016/j.jhydrol.2018.05.003.
-#'
+# This function performs wavelet decomposition using the à trous algorithm (AT) or
+# the maximal overlap discrete wavelet transform (MODWT).
+#
+# # Inputs:
+# @param ts - time series [N x 1]
+# @param wt - type of wavelet transform [string; at','modwt']
+# @param wavelet - scaling filter name [string]
+# @param decomp_level - decomposition level [1 < integer < N/2]
+#
+# Output:
+# @param W - wavelet and scaling coefficients [N x D x J+1] (wavelet coefs in first J columns)
+#
+# Date created: May 15, 2018
+# Date updated: May 15, 2018
+#
+# Reference(s):
+#
+# Quilty, J., and J. Adamowski (2018), Addressing the incorrect usage of wavelet-
+# based hydrological and water resources forecasting models for real-world
+# applications with best practices and a new forecasting framework, J. Hydrol.,
+# doi:10.1016/j.jhydrol.2018.05.003.
+#
 
-wddff.wt <- function(ts=matrix(runif(100),100,1),
-                     wt='at',wavelet='haar',decomp_level=1){
-
-  switch(wt,
-
-         # AT
-
-         at={
-
-           W = atrous_dwt(ts,wavelet,decomp_level) # use AT algoritm
-
-         },
-
-         # MODWT
-
-         modwt={
-
-           W = mo_dwt(ts,wavelet,decomp_level) # use MODWT algoritm
-
-         }
-
-  )
-
-  return(W)
-
-}
+# wddff.wt <- function(ts=matrix(runif(100),100,1),
+#                      wt='at',wavelet='haar',decomp_level=1){
+#
+#   switch(wt,
+#
+#          # AT
+#
+#          at={
+#
+#            W = atrous_dwt(ts,wavelet,decomp_level) # use AT algoritm
+#
+#          },
+#
+#          # MODWT
+#
+#          modwt={
+#
+#            W = mo_dwt(ts,wavelet,decomp_level) # use MODWT algoritm
+#
+#          }
+#
+#   )
+#
+#   return(W)
+#
+# }
 
