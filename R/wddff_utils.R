@@ -19,7 +19,7 @@
 # based hydrological and water resources forecasting models for real-world
 # applications with best practices and a new forecasting framework, J. Hydrol.,
 # doi:10.1016/j.jhydrol.2018.05.003.
-
+#' @keywords internal
 organizeIOData <- function(pd_list,max_decomp_level,
                            max_wavelet_length){
 
@@ -187,7 +187,7 @@ organizeIOData <- function(pd_list,max_decomp_level,
 # Output:
 # list containing target and input data (which may include their wavelet-based
 # counterpats)
-
+#' @keywords internal
 prepareData <- function(y,x=NULL,z=NULL,
                         leadtime,lag_Y,lag_X,
                         wfm='none',wt='at',wavelet='haar',decomp_level=1){
