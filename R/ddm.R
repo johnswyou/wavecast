@@ -64,8 +64,8 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 
          grnn={
 
-           #' perform k-fold cross-validation to select best kernel
-           #' bandwith parameter
+           # perform k-fold cross-validation to select best kernel
+           # bandwith parameter
 
            k = 5
            n = length(yc)
@@ -265,8 +265,8 @@ grnn_estimate <- function(Y,X,Yv,Xv){
   # calculate kernel matrix
   D = pdist2(X,Xv) # Euclidean distance (see Eq. 4 in Specht, 1991)
 
-  #' sub-function 1: calculate GRNN predictions for given target (Y), distance
-  #' matrix (D), and kernel bandwidth (bw)
+  # sub-function 1: calculate GRNN predictions for given target (Y), distance
+  # matrix (D), and kernel bandwidth (bw)
 
   get_grnn_prediction <- function(Y1,D1,bw1){
 
@@ -287,8 +287,8 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 
   }
 
-  #' sub-function 2: calculate performance of GRNN model predictions (Pv) against
-  #' validation target (Yv)
+  # sub-function 2: calculate performance of GRNN model predictions (Pv) against
+  # validation target (Yv)
 
   eval_grnn_perf <- function(bw2,Y2,D2,Yv2){
 
@@ -303,8 +303,8 @@ grnn_estimate <- function(Y,X,Yv,Xv){
   #
   # grnn_estimate <- bw_opt$minimum # return optimized kernel bandwidth
 
-  #' uncomment lines below (and 'bw_opt' and 'grnn_estimate' lines above) here
-  #' to use Differential Evolution (DE) -based optimizer 'DEoptim'
+  # uncomment lines below (and 'bw_opt' and 'grnn_estimate' lines above) here
+  # to use Differential Evolution (DE) -based optimizer 'DEoptim'
 
   bw_grr = ((4/(nrow(X)+2))^(1/(nrow(X)+4)))*
     nrow(X)^(-1/(ncol(X)+4)) # GRR bandwidth
@@ -468,8 +468,8 @@ spoV_estimate <- function(Y,X,p){
 
   N = nrow(as.matrix(X)) # number of samples
 
-  #' create p-th degree design matrices transformed from original inputs X
-  #' (see Eqs. 5a - 5d in Wu and Kareem, 2014)
+  # create p-th degree design matrices transformed from original inputs X
+  # (see Eqs. 5a - 5d in Wu and Kareem, 2014)
 
   mat = as.data.frame(X) # convert to data frame for calculating
   const = matrix(rep(1,N),N,1) # constant term (not included in Wu and Kareem, 2014)
@@ -534,8 +534,8 @@ spoV_predict <- function(X,H,p){
 
   N = nrow(as.matrix(X)) # number of samples
 
-  #' create p-th degree design matrices transformed from original inputs X
-  #' (see Eqs. 5a - 5d in Wu and Kareem, 2014)
+  # create p-th degree design matrices transformed from original inputs X
+  # (see Eqs. 5a - 5d in Wu and Kareem, 2014)
 
   mat = as.data.frame(X) # convert to data frame for calculating
   const = matrix(rep(1,N),N,1) # constant term (not included in Wu and Kareem, 2014)
