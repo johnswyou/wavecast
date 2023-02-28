@@ -191,7 +191,8 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
     if( !scale_inputs ){
 
-      IO.s[,-1] = IO.od[[i]][,-1]
+      # IO.s[,-1] = IO.od[[i]][,-1]
+      IO.s[,-1] = as.matrix(IO.od[[i]][,-1])
 
     }
 
