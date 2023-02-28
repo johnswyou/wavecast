@@ -299,21 +299,21 @@ grnn_estimate <- function(Y,X,Yv,Xv){
   }
 
   # optimize kernel bandwith using 'optimize' or 'DEoptim' uncomment one or the other
-  # bw_opt = optimize(eval_grnn_perf,bw_interval,Y,D,Yv) # Line Search optimizer
-  #
-  # grnn_estimate <- bw_opt$minimum # return optimized kernel bandwidth
+  bw_opt = stats::optimize(eval_grnn_perf,bw_interval,Y,D,Yv) # Line Search optimizer
+
+  grnn_estimate <- bw_opt$minimum # return optimized kernel bandwidth
 
   # uncomment lines below (and 'bw_opt' and 'grnn_estimate' lines above) here
   # to use Differential Evolution (DE) -based optimizer 'DEoptim'
 
-  bw_grr = ((4/(nrow(X)+2))^(1/(nrow(X)+4)))*
-    nrow(X)^(-1/(ncol(X)+4)) # GRR bandwidth
-  bw_opt = DEoptim::DEoptim(eval_grnn_perf,
-                            bw_grr,Y,D,Yv,
-                            lower=bw_interval[1],
-                            upper=bw_interval[2]) # Differential Evolution optimzer
-
-  grnn_estimate <- bw_opt$optim$bestmem
+  # bw_grr = ((4/(nrow(X)+2))^(1/(nrow(X)+4)))*
+  #   nrow(X)^(-1/(ncol(X)+4)) # GRR bandwidth
+  # bw_opt = DEoptim::DEoptim(eval_grnn_perf,
+  #                           bw_grr,Y,D,Yv,
+  #                           lower=bw_interval[1],
+  #                           upper=bw_interval[2]) # Differential Evolution optimzer
+  #
+  # grnn_estimate <- bw_opt$optim$bestmem
 
 
 
