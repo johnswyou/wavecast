@@ -22,3 +22,5 @@ Imports:
     utils
 Remotes: 
     johnswyou/hydroIVS
+URL: https://github.com/johnswyou/wavecast
+BugReports: https://github.com/johnswyou/wavecast/issues
