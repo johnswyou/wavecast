@@ -23,7 +23,7 @@ wddff(
   ivs_param = NULL,
   ddm = "spov",
   ddm_param = 1,
-  scale_inputs = FALSE,
+  scale_inputs = TRUE,
   scale_target = FALSE,
   cutoff0 = FALSE,
   light = TRUE,
