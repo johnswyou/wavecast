@@ -208,9 +208,9 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
     # PERFORM INPUT VARIABLE SELECTION (IVS)
     ###########################################################################
 
-    IO.ivs[[i]] = ivsIOData(y=IO.s[IO.inds$indc,1],
-                            x=IO.s[IO.inds$indc,-1],
-                            ivsm,ivs_param)
+    IO.ivs[[i]] = hydroIVS::ivsIOData(y=IO.s[IO.inds$indc,1],
+                                      x=IO.s[IO.inds$indc,-1],
+                                      ivsm,ivs_param)
 
     ###########################################################################
     # CALIBRATE DATA-DRIVEN MODEL (DDM)
@@ -262,9 +262,9 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
 
   # get wddff performance
 
-  perf_c = gof(obs=targ[IO.inds$indc], sim=pred[IO.inds$indc])
-  perf_v = gof(obs=targ[IO.inds$indv], sim=pred[IO.inds$indv])
-  perf_t = gof(obs=targ[IO.inds$indt], sim=pred[IO.inds$indt])
+  perf_c = hydroGOF::gof(obs=targ[IO.inds$indc], sim=pred[IO.inds$indc])
+  perf_v = hydroGOF::gof(obs=targ[IO.inds$indv], sim=pred[IO.inds$indv])
+  perf_t = hydroGOF::gof(obs=targ[IO.inds$indt], sim=pred[IO.inds$indt])
 
   ###########################################################################
   # STORE (AND, IF REQUIRED, SAVE) RESULTS
@@ -360,7 +360,7 @@ upd.wddff <- function(mdl_rslt,
   # HIGH LEVEL SETTINGS
   ###########################################################################
 
-  set.seed(123) # make reproducible
+  # set.seed(123) # make reproducible
 
   ###########################################################################
   # SET NEW MODEL STRUCTURE AND UPDATE VARIABLES
@@ -535,8 +535,8 @@ upd.wddff <- function(mdl_rslt,
 
   target = rbind(rslt$target,targ)
   predictions = rbind(rslt$predictions,pred)
-  perf_v = gof(obs=target[rslt$indv], sim=predictions[rslt$indv])
-  perf_t = gof(obs = target[rslt$indt], sim = predictions[rslt$indt])
+  perf_v = hydroGOF::gof(obs=target[rslt$indv], sim=predictions[rslt$indv])
+  perf_t = hydroGOF::gof(obs = target[rslt$indt], sim = predictions[rslt$indt])
 
   ###########################################################################
   # STORE (AND, IF REQUIRED, SAVE) RESULTS
@@ -608,7 +608,7 @@ wddff.wfm <- function(ts,W_ts,wfm,lags,maxlag,nbc){
   else{ # not req'd
 
     W_ts_bc = W_ts
-    ts_bc = target
+    ts_bc = ts
 
   }
 

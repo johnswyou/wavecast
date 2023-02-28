@@ -20,7 +20,7 @@ aril <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate average relative interval length (ARIL)
@@ -54,7 +54,7 @@ avg.asym.deg.S <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate S index of average asymmetry degree
@@ -88,7 +88,7 @@ avg.asym.deg.T <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate T index of average asymmetry degree
@@ -122,7 +122,7 @@ avg.dev.amp <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate average deviation amplitude (D)
@@ -156,7 +156,7 @@ avg.rel.dev.amp <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate average relative deviation amplitude (RD)
@@ -277,7 +277,7 @@ cpp <- function(Y, X){
   eta_index = 1 - (sum(fq==0 | fq==1)/n) # eta index (Renard et al., 2009)
 
   plot(fq,tq,xlim=c(0,1),ylim=c(0,1))
-  abline(0,1)
+  graphics::abline(0,1)
 
 
   list( fq = fq, tq = tq,
@@ -306,7 +306,7 @@ lme <- function(Y, X){
   X = as.numeric(X)
   Y = as.numeric(Y)
 
-  k1 = cor(Y,X)*(var(X)/var(Y))
+  k1 = stats::cor(Y,X)*(stats::var(X)/stats::var(Y))
   beta = mean(X)/mean(Y)
 
   # Liu-Mean Efficiency (LME)
@@ -347,7 +347,7 @@ meanIS <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
   n = length(Y)
 
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   WPI = Qlu[2,] - Qlu[1,]
@@ -406,7 +406,7 @@ mpi <- function(X, alpha=0.5){
   X = as.matrix(X)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate mean prediction interval (MPI)
@@ -441,7 +441,7 @@ nue <- function(Y, X, w=1, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate prediction interval coverage probability (PICP)
@@ -481,7 +481,7 @@ picp <- function(Y, X, alpha=0.5){
   Y = as.matrix(Y)
 
   # get lower and upper qualtiles at confidence level
-  Qlu = apply(X, 1, quantile, probs = c(alpha/2, 1 - alpha/2),
+  Qlu = apply(X, 1, stats::quantile, probs = c(alpha/2, 1 - alpha/2),
               na.rm = TRUE)
 
   # calculate prediction interval coverage probability (PICP)
@@ -524,7 +524,7 @@ qlp <- function(Y, X, p=0.5){
   onevec = matrix(1, nrow = length(Y),1)
 
   # get quantile
-  Qp = apply(X, 1, quantile, probs = p,
+  Qp = apply(X, 1, stats::quantile, probs = p,
              na.rm = TRUE)
 
   # calculate p-quantile loss (QLp) (Li et al., 2019) also known as p-risk in Seeger et al. (2016)
@@ -578,7 +578,7 @@ rnp <- function(Y, X){
   rnp.beta = mean.X / mean.Y
 
   # r component
-  rnp.r = cor(X, Y, method="spearman")
+  rnp.r = stats::cor(X, Y, method="spearman")
 
   # non-parametric Kling-Gupta Efficiency (RNP)
   res = 1 - sqrt( (rnp.alpha-1)^2 + (rnp.beta-1)^2 + (rnp.r - 1)^2)

@@ -4,10 +4,10 @@
 \alias{yLTD}
 \title{Lag Target Variables}
 \usage{
-yLTD(y, leadtime = 1, timedelay = 1)
+yLTD(x, leadtime = 1, timedelay = 1)
 }
 \arguments{
-\item{y}{time series [N x 1]}
+\item{x}{time series [N x 1]}
 
 \item{leadtime}{forecast lead time [scalar >= 0], Default: 1}
 

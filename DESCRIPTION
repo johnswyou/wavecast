@@ -1,12 +1,24 @@
 Package: wavecast
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Wavelet Data-Driven Forecasting Framework
+Version: 0.0.1.9000
+Authors@R: c(
+    person("John", "Quilty", , "jquilty@uwaterloo.ca", role = c("aut"), comment = c(ORCID = "0000-0002-0207-8077")),
+    person("John", "You", , "johnswyou@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3509-0312")))
+Description: Implements WDDFF first presented by Quilty and Adamowski in (Quilty & Adamowski, 2018).
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: 
+    DEoptim,
+    fastWavelets,
+    FNN,
+    graphics,
+    hydroGOF,
+    hydroIVS,
+    pracma,
+    RRF,
+    stats,
+    utils
+Remotes: 
+    johnswyou/hydroIVS

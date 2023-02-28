@@ -86,7 +86,7 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
 
              p = grnn_predict(yc, inputs_c, inputs_c, tmp_params[i])
 
-             msqerr[i] = mse(obs = as.matrix(yc), sim = p)
+             msqerr[i] = hydroGOF::mse(obs = as.matrix(yc), sim = p)
 
            }
 
@@ -103,7 +103,7 @@ calibrateDDM <- function(yc,xc,ddm,ddm_param){
          rrf={
 
            # estimate parameters
-           mdl_params = RRF(y=yc, x=inputs_c,
+           mdl_params = RRF::RRF(y=yc, x=inputs_c,
                             ntree=ddm_param, # usually set between 128 and 1000, 500 is typical
                             mtry = max(floor(ncol(inputs_c)/3), 1), # usually set to max(floor(ncol(x)/3), 1)
                             flagReg=1, # set to 0 for standard RF
@@ -207,7 +207,7 @@ predictDDM <- function(x,xc=NULL,yc=NULL,ddm,ddm_param,mdl_params){
 
          rrf={
 
-           pred = predict(mdl_params,inputs) # make predictions
+           pred = stats::predict(mdl_params,inputs) # make predictions
 
          }
 
@@ -263,7 +263,7 @@ grnn_estimate <- function(Y,X,Yv,Xv){
   # Nd = ncol(X) # number of inputs
 
   # calculate kernel matrix
-  D = pdist2(X,Xv) # Euclidean distance (see Eq. 4 in Specht, 1991)
+  D = pracma::pdist2(X,Xv) # Euclidean distance (see Eq. 4 in Specht, 1991)
 
   # sub-function 1: calculate GRNN predictions for given target (Y), distance
   # matrix (D), and kernel bandwidth (bw)
@@ -294,7 +294,7 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 
     Pv = get_grnn_prediction(Y2,D2,bw2) # get GRNN prediction
 
-    eval_grnn_perf <- mse(as.matrix(Yv2),Pv) # evaluate objective function
+    eval_grnn_perf <- hydroGOF::mse(as.matrix(Yv2),Pv) # evaluate objective function
 
   }
 
@@ -308,10 +308,10 @@ grnn_estimate <- function(Y,X,Yv,Xv){
 
   bw_grr = ((4/(nrow(X)+2))^(1/(nrow(X)+4)))*
     nrow(X)^(-1/(ncol(X)+4)) # GRR bandwidth
-  bw_opt = DEoptim(eval_grnn_perf,
-                   bw_grr,Y,D,Yv,
-                   lower=bw_interval[1],
-                   upper=bw_interval[2]) # Differential Evolution optimzer
+  bw_opt = DEoptim::DEoptim(eval_grnn_perf,
+                            bw_grr,Y,D,Yv,
+                            lower=bw_interval[1],
+                            upper=bw_interval[2]) # Differential Evolution optimzer
 
   grnn_estimate <- bw_opt$optim$bestmem
 
@@ -358,7 +358,7 @@ grnn_predict <- function(Y,X,Xtest,
   Xtest = as.matrix(Xtest)
 
   N = nrow(Xtest) # number of points in Xtest to predict
-  D = pdist2(X,Xtest) # Euclidean distance (see Eq. 4 in Specht, 1991)
+  D = pracma::pdist2(X,Xtest) # Euclidean distance (see Eq. 4 in Specht, 1991)
   K = exp(-(D^2) / (2 * (bw^2))) # RBF kernel function (see Eq. 5 in Specht, 1991)
 
   P = matrix(0,N,1)
@@ -411,7 +411,7 @@ knnr_predict <- function(Y,X,Xtest,k=3,method="kd_tree"){
 
   # get k nearest neighbours to Xtest
 
-  nn_inds = get.knnx(X,Xtest,k,"kd_tree")$nn.index
+  nn_inds = FNN::get.knnx(X,Xtest,k,"kd_tree")$nn.index
 
   # identify target related to each of the nearest neighbours
 
@@ -431,7 +431,7 @@ knnr_predict <- function(Y,X,Xtest,k=3,method="kd_tree"){
 
 # ------------------------------------------------------------------------------
 
-# require(pracma) # required for Moore-Penrose generalized inverse function pinv()
+# require(pracma) # required for Moore-Penrose generalized inverse function pracma::pinv()
 
 #' @title Calibrate (train) a sparse p-th order Volterra series model
 #' @description
@@ -482,7 +482,7 @@ spoV_estimate <- function(Y,X,p){
 
     for(i in 2:p) {
 
-      combns = combn(ncol(mat) + i - 1, i) - 0:(i - 1) # "unique" permutations only (see Eq. 8 in Wu and Kareem [2014])
+      combns = utils::combn(ncol(mat) + i - 1, i) - 0:(i - 1) # "unique" permutations only (see Eq. 8 in Wu and Kareem [2014])
       #colnames(combs) <- apply(combs, 2, paste, collapse = "-") # Just for display of output, we keep info of combinations in colnames
 
       # p-th order triangular kernels
@@ -495,8 +495,8 @@ spoV_estimate <- function(Y,X,p){
   Xt = do.call(cbind,res_mat) # unroll list into matrix
   Xtc = as.matrix(cbind(const,Xt)) # include constant term
 
-  # calculate spoV kernels using Moore-Penrose generalized inverse pinv()
-  H = pinv(Xtc) %*% Y
+  # calculate spoV kernels using Moore-Penrose generalized inverse pracma::pinv()
+  H = pracma::pinv(Xtc) %*% Y
   # prediction = Xtc %*% H
 
   spoV_estimate <- H # return parameters
@@ -548,7 +548,7 @@ spoV_predict <- function(X,H,p){
 
     for(i in 2:p) {
 
-      combns = combn(ncol(mat) + i - 1, i) - 0:(i - 1)  # "unique" permutations only (see Eq. 8 in Wu and Kareem [2014])
+      combns = utils::combn(ncol(mat) + i - 1, i) - 0:(i - 1)  # "unique" permutations only (see Eq. 8 in Wu and Kareem [2014])
       #colnames(combs) <- apply(combs, 2, paste, collapse = "-") # Just for display of output, we keep info of combinations in colnames
 
       # p-th order triangular kernels

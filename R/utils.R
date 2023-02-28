@@ -11,7 +11,7 @@ bindYX <- function(y,x){
 
   yx = cbind(y,x)
 
-  return(yx[complete.cases(yx), ]) # return only rows w/o 'NA' value
+  return(yx[stats::complete.cases(yx), ]) # return only rows w/o 'NA' value
 
 } # EOF...
 
@@ -31,7 +31,7 @@ bindYXZ <- function(y,x,z){
 
   yxz = cbind(y,x,z)
 
-  return(yxz[complete.cases(yxz), ]) # return only rows w/o 'NA' value
+  return(yxz[stats::complete.cases(yxz), ]) # return only rows w/o 'NA' value
 
 } # EOF...
 
@@ -175,7 +175,7 @@ standardize <- function(X1,X2,...){
   X2 = as.matrix(X2)
 
   X1mean = apply(X1, MARGIN = 2,FUN = function(X1) (mean(X1,...)))
-  X1sd = apply(X1, MARGIN = 2,FUN = function(X1) (sd(X1,...)))
+  X1sd = apply(X1, MARGIN = 2,FUN = function(X1) (stats::sd(X1,...)))
 
   Xs = t(t(sweep(X2, 2, X1mean)) / X1sd)
 
@@ -224,7 +224,7 @@ de_standardize <- function(X1,X2,...){
   X2 = as.matrix(X2)
 
   X1mean = apply(X1, MARGIN = 2,FUN = function(X1) (mean(X1,...)))
-  X1sd = apply(X1, MARGIN = 2,FUN = function(X1) (sd(X1,...)))
+  X1sd = apply(X1, MARGIN = 2,FUN = function(X1) (stats::sd(X1,...)))
 
   Xds = t(t(sweep(X2,2,X1sd,'*')) + X1mean)
   #Xds = t(t(sweep(X2, 2, X1mean)) / X1sd)
@@ -249,7 +249,7 @@ de_standardize <- function(X1,X2,...){
 # This function time lags the target variable based on the lead time and
 # required time delay.
 #' @keywords internal
-lagmatrix <- function(x,max.lag){embed(c(rep(NA,max.lag),x),max.lag+1)}
+lagmatrix <- function(x,max.lag){stats::embed(c(rep(NA,max.lag),x),max.lag+1)}
 
 # Example
 # lagmatrix(1:10,2)
@@ -339,7 +339,7 @@ time2sine = function(dte=seq(as.Date("1910/1/1"), as.Date("1999/12/30"), "days")
 # copy and paste data from R Studio into Excel
 #' @keywords internal
 write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
-  write.table(x,"clipboard-16384",sep="\t",row.names=row.names,col.names=col.names,...)
+  utils::write.table(x,"clipboard-16384",sep="\t",row.names=row.names,col.names=col.names,...)
 }
 
 # ------------------------------------------------------------------------------
@@ -378,7 +378,7 @@ xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
     for(i in 1:ncol(x)){
 
-      tmp = embed(c(rep(NA,leadtime + timedelays[i]),x[,i]),
+      tmp = stats::embed(c(rep(NA,leadtime + timedelays[i]),x[,i]),
                   leadtime + timedelays[i])
       tmp = as.data.frame(tmp) # convert to data frame (embed only operates on vectors/matrices)
 
@@ -405,7 +405,7 @@ xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 
   else{
 
-    tmp = embed(c(rep(NA,leadtime + timedelays),x),leadtime + timedelays)
+    tmp = stats::embed(c(rep(NA,leadtime + timedelays),x),leadtime + timedelays)
     tmp = as.data.frame(tmp) # convert to data frame (embed only operates on vectors/matrices)
 
     if(!is.null(colnames(x))){
@@ -445,7 +445,7 @@ xLeadTimeDelay <- function(x,leadtime=1,timedelays=NULL){
 yLeadTimeDelay <- function(x,leadtime=1,timedelay=1){
 
 
-  tmp = embed(c(rep(NA,leadtime + timedelay),x),leadtime + timedelay)
+  tmp = stats::embed(c(rep(NA,leadtime + timedelay),x),leadtime + timedelay)
 
   if(!is.null(colnames(x))){
 
@@ -529,9 +529,9 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 
     else if( (leadtime == 0) & (timedelays[i] > 0) ){
 
-      # tmp = cbind(x[,i],embed(c(rep(NA,timedelays[i]),x[,i]),
+      # tmp = cbind(x[,i],stats::embed(c(rep(NA,timedelays[i]),x[,i]),
       #                         timedelays[i]))
-      tmp = cbind(x[,i],embed(c(rep(NA,timedelays[i]),x[,i]),
+      tmp = cbind(x[,i],stats::embed(c(rep(NA,timedelays[i]),x[,i]),
                               timedelays[i])[1:(length(x[,i])),])
 
       if(!is.null(colnames(x))){
@@ -556,7 +556,7 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 
     else if( (leadtime > 0) & (timedelays[i] == 0) ){
 
-      tmp = embed(c(rep(NA,leadtime + 1),x[,i]),leadtime + 1)
+      tmp = stats::embed(c(rep(NA,leadtime + 1),x[,i]),leadtime + 1)
 
       if(!is.null(colnames(x))){
 
@@ -580,7 +580,7 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 
     else{ # (leadtime > 0) & (timedelay > 0) )
 
-      tmp = embed(c(rep(NA,leadtime + timedelays[i]),x[,i]),
+      tmp = stats::embed(c(rep(NA,leadtime + timedelays[i]),x[,i]),
                   leadtime + timedelays[i])
 
       if(!is.null(colnames(x))){
@@ -616,7 +616,7 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 #' @description
 #' This function time lags the target variable based on the lead time and
 #' required time delay.
-#' @param y time series \[N x 1\]
+#' @param x time series \[N x 1\]
 #' @param leadtime forecast lead time \[scalar >= 0\], Default: 1
 #' @param timedelay number of time delays \[scalar >= 0\], Default: 1
 #' @return forecast lead time and time delay matrix \[N x timedelay+1\]
@@ -625,7 +625,7 @@ xLTD <- function(x,leadtime=1,timedelays=NULL){
 #' function can be used for both modeling and forecasting.
 #' @rdname yLTD
 #' @export
-yLTD <- function(y,leadtime=1,timedelay=1){
+yLTD <- function(x,leadtime=1,timedelay=1){
 
   # case 1 #############################################################
 
@@ -655,9 +655,9 @@ yLTD <- function(y,leadtime=1,timedelay=1){
 
   else if( (leadtime == 0) & (timedelay > 0) ){
 
-    #tmp = cbind(x,embed(c(rep(NA,timedelay),x),timedelay))
+    #tmp = cbind(x,stats::embed(c(rep(NA,timedelay),x),timedelay))
     tmp = cbind(x,
-                embed(c(rep(NA,timedelay),x),timedelay)[1:length(x),])
+                stats::embed(c(rep(NA,timedelay),x),timedelay)[1:length(x),])
 
     if(!is.null(colnames(x))){
 
@@ -687,7 +687,7 @@ yLTD <- function(y,leadtime=1,timedelay=1){
 
   else{ # (leadtime > 0) & (timedelay > 0) )
 
-    tmp = embed(c(rep(NA,leadtime + timedelay),x),leadtime + timedelay)
+    tmp = stats::embed(c(rep(NA,leadtime + timedelay),x),leadtime + timedelay)
 
     if(!is.null(colnames(x))){
 

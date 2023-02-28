@@ -56,14 +56,14 @@ organizeIOData <- function(pd_list,max_decomp_level,
 
            for(j in 1:length(pd_list$wlevels)){
 
-             Wt = setNames(data.frame(
+             Wt = stats::setNames(data.frame(
                pd_list$Wtarget[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Wtarget) ) ]),
                names(pd_list$Wtarget)[grepl(pd_list$wlevels[j] ,
                                             names( pd_list$Wtarget) )])
 
-             Wi = setNames(data.frame(
+             Wi = stats::setNames(data.frame(
                pd_list$Winputs[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Winputs) ) ]),
@@ -83,7 +83,7 @@ organizeIOData <- function(pd_list,max_decomp_level,
 
            for(j in 1:length(pd_list$wlevels)){
 
-             Wt = setNames(data.frame(
+             Wt = stats::setNames(data.frame(
                pd_list$Wtarget[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Wtarget) ) ]),
@@ -113,14 +113,14 @@ organizeIOData <- function(pd_list,max_decomp_level,
 
            for(j in 1:length(pd_list$wlevels)){
 
-             Wt = setNames(data.frame(
+             Wt = stats::setNames(data.frame(
                pd_list$Wtarget[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Wtarget) ) ]),
                names(pd_list$Wtarget)[grepl(pd_list$wlevels[j] ,
                                             names( pd_list$Wtarget) )])
 
-             Wi = setNames(data.frame(
+             Wi = stats::setNames(data.frame(
                pd_list$Winputs[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Winputs) ) ]),
@@ -140,7 +140,7 @@ organizeIOData <- function(pd_list,max_decomp_level,
 
            for(j in 1:length(pd_list$wlevels)){
 
-             Wt = setNames(data.frame(
+             Wt = stats::setNames(data.frame(
                pd_list$Wtarget[ ,
                                 grepl(pd_list$wlevels[j] ,
                                       names( pd_list$Wtarget) ) ]),
@@ -468,7 +468,7 @@ waveletDecomp <- function(y,wt='modwt',wavelet='haar',decomp_level=1){
 
          at={
 
-           W = atrous_dwt(y,wavelet,decomp_level) # use AT algoritm
+           W = fastWavelets::atrous_dwt(y,wavelet,decomp_level) # use AT algoritm
 
          },
 
@@ -476,7 +476,7 @@ waveletDecomp <- function(y,wt='modwt',wavelet='haar',decomp_level=1){
 
          modwt={
 
-           W = mo_dwt(y,wavelet,decomp_level) # use MODWT algoritm
+           W = fastWavelets::mo_dwt(y,wavelet,decomp_level) # use MODWT algoritm
 
          }
 
