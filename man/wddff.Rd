@@ -73,7 +73,7 @@ wddff(
 \item ivs_param[1] =  Hampel test criterion threshold [scalar > 0]}
 \item \code{ea_cmi_tol}:
 \itemize{
-\item ivs_param[1] = CMI/MI threshold [0 < scalar <= 1]
+\item ivs_param[1] = Conditional Mutual Information (CMI)/Mutual Information (MI) threshold [0 < scalar <= 1]
 \item ivs_param[2] = no. of nearest neighbours [1 < integer < sample size-1]}
 \item \code{knn_cmi_tol}:
 \itemize{
