@@ -86,7 +86,7 @@ wddff <- function(y, x=NULL, z=NULL, leadtime=1, lag_Y=1, lag_X=1,
                   decomp_level=1, max_decomp_level=decomp_level, max_wavelet_length=length(fastWavelets::wavelet_filter(wavelet)),
                   ivsm = 'none', ivs_param = NULL,
                   ddm='spov', ddm_param=1,
-                  scale_inputs=FALSE, scale_target=FALSE,
+                  scale_inputs=TRUE, scale_target=FALSE,
                   cutoff0=FALSE, light=TRUE, savefile=FALSE){
 
   ###########################################################################
