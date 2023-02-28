@@ -42,7 +42,7 @@
 #' - 'spov': ddm_param\[1\] = model order \[1 < integer <= 3\]
 #' - 'knnr': ddm_param\[1\] = no. of nearest neighbours \[1 < integer < sample size-1\]
 #' - 'grnn': no ddm_param as kernel bandwidth determined automatically
-#' - 'rrf': ddm_param\[1\] = ntrees \[(1,500)\]
+#' - 'rrf': ddm_param\[1\] = ntrees (usually set between 128 and 1000, 500 is typical)
 #' @param scale_inputs scale inputs (predictors) \[0,1\] \[binary\]
 #' @param scale_target scale target (predictand) \[0,1\] \[binary\]
 #' @param cutoff0 ensure that all predictions > 0 \[binary\]
